@@ -13,4 +13,4 @@ Cargo.lock
 **/*.asv
 
 # MATLAB data files
-**/*.mat
+MATLAB/*.mat
