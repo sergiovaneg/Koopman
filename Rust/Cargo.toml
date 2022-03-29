@@ -1,0 +1,13 @@
+[package]
+name        =   "koopman_suite"
+version     =   "0.1.0"
+authors     =   ["Sergio Vanegas"]
+edition     =   "2021"
+
+[dependencies]
+ode_solvers =   "0.3.6"
+rand        =   "0.8.5"
+
+[[bin]]
+name        =   "koopman"
+path        =   "./main.rs"
