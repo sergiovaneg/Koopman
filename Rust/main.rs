@@ -1,5 +1,3 @@
-use std::io;
-
 use ode_solvers::dop853::*;
 use ode_solvers::*;
 
