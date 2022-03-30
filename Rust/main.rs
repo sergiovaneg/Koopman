@@ -4,6 +4,10 @@ use ode_solvers::*;
 use rand::{distributions::Uniform, Rng};
 use rand_distr::Normal;
 
+use std::fs::{File,create_dir_all};
+use std::io::Write;
+use std::path::Path;
+
 type State = Vector2<f64>;
 type Time = f64;
 
@@ -50,11 +54,36 @@ fn main() {
                             u: (0..=samples).map(|_| rng.sample(&noise)).collect()};
     let x0 = State::from_vec((0..2).map(|_| rng.sample(&range)).collect());
 
+    let path = Path::new("/home/sergiovaneg/Documents/Thesis/Rust_Data/");
+    create_dir_all(path).unwrap();
+    let mut input_file = File::create(path.to_str().unwrap().to_owned() + "input.csv").unwrap();
+    for i in &system.u{
+        input_file.write_fmt(format_args!("{}\n", i)).unwrap();
+    }
+
     let mut stepper = Rk4::new(system, 0., x0, period, ts);
     let res = stepper.integrate();
 
     match res{
-        Ok(stats) => println!("Stats: {}",stats),
+        Ok(stats) => {
+            println!("{}", stats);
+            
+            let mut time_file = File::create(path.to_str().unwrap().to_owned() + "time.csv").unwrap();
+            time_file.write_fmt(format_args!("0\n")).unwrap();
+            let mut state_file = File::create(path.to_str().unwrap().to_owned() + "states.csv").unwrap();
+            for j in &x0{
+                state_file.write_fmt(format_args!("{},", j)).unwrap();
+            }
+            state_file.write_fmt(format_args!("\n")).unwrap();
+
+            for i in 1..stepper.x_out().len(){
+                time_file.write_fmt(format_args!("{}\n", &stepper.x_out()[i])).unwrap();
+                for j in &stepper.y_out()[i]{
+                    state_file.write_fmt(format_args!("{},", j)).unwrap();
+                }
+                state_file.write_fmt(format_args!("\n")).unwrap();
+            }
+        }
         Err(_) => println!("Well...shit."),
     }
 }
