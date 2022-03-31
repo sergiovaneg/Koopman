@@ -21,7 +21,7 @@ delete(Data_Source+"Data_*.mat");
 parfor f=1:N_Sim
     mu = randn(1); % 0 for zero-mean noise
     u = sigma^2*randn(size(u_t)) + mu;
-    z0 = 4*rand(2,1) - 2;
+    z0 = 2*rand(2,1) - 1;
     [~,z] = ode113(@(t,z) VanDerPol(t,z,u_t,u), u_t, z0);
     
     z = z';
