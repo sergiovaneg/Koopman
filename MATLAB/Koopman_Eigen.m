@@ -19,7 +19,7 @@ end
 
 % P = 11;
 % [g_t,n] = Poly_Obs(z,P);
-M = 20;
+M = 50;
 X0 = 2*rand(size(z,1),M)-1;
 [g_t,n] = Spline_Radial_Obs(z,X0);
 
@@ -49,23 +49,25 @@ end
 
 %% Second Step - Operator calculation
 
-alpha = 0.001;
+alpha = 0.01;
 [A,B] = Koopman(Px,Py,U,alpha);
 % Generic way to recover original states
 C = Unobserver(Py,Z);
 % Recovery of original states independent from input
 D = zeros(size(Z,1),size(U,1));
+
+[Xi,Mu] = eig(A);
+
+figure(1);
+scatter(real(diag(Mu)),imag(diag(Mu)));
+hold on;
+rectangle('Position', [-1 -1 2 2], 'Curvature', 1);
+hold off;
+
 % save(sprintf(Data_Source+'Operator_P_%i.mat',P), ...
 %     "A","B","C","D","ts");
 save(sprintf(Data_Source+'Operator_M_%i.mat',M), ...
     "A","B","C","D","ts","X0");
-
-Lambda = eig(A);
-figure(1);
-scatter(real(Lambda),imag(Lambda));
-hold on;
-rectangle('Position', [-1 -1 2 2], 'Curvature', 1);
-hold off;
 
 %% Third Step - Approximation
 
@@ -88,5 +90,9 @@ end
 z_p = C*g_p;
 
 scatter(z_p(1,:),z_p(2,:),36*exp(-markerDecay*(0:L-1)));
-legend("Original Data","Trajectory Prediction");
+legend("Original Data","Trajectory Prediction (full-operator)");
 hold off;
+
+%% Fourth Step - Eigen Approx
+
+phi = 

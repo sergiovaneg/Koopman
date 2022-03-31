@@ -4,7 +4,7 @@ function [A,B] = Koopman(X,Y,U,alpha)
 
     G = [X/K;U/K]*[X;U]';
     V = (Y/K)*[X;U]';
-
+    
     A = zeros(size(Y,1),size(X,1));
     B = zeros(size(Y,1),size(U,1));
 
@@ -16,11 +16,15 @@ function [A,B] = Koopman(X,Y,U,alpha)
     for i=1:size(Y,1)
 %         fun = @(m) sqrt((Y(i,:)-m*[X;U]).^2 ...
 %                         +(alpha/K)*norm(m,"fro")^2);
+        fun = @(m) (Y(i,:)-m*[X;U])*(Y(i,:)-m*[X;U])' ...
+                + alpha*norm(m,"fro");
         m0 = V(i,:)/G;
 
 %         m = lsqnonlin(fun,m0);
+        options = optimset('Display','final');
+        m = fminsearch(fun,m0,options);
 
-        A(i,:) = m0(1:size(X,1));
-        B(i,:) = m0(size(X,1)+1:end);
+        A(i,:) = m(1:size(X,1));
+        B(i,:) = m(size(X,1)+1:end);
     end
 end

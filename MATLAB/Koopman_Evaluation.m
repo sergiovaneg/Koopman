@@ -8,7 +8,7 @@ Data_Source = "~/Documents/Thesis/VanDerPol_Unsteady_Input/";
 
 %% Operator retrieval
 
-P = [5;10;11];
+P = [5;10;12;13];
 M = [10;20;50;100;150];
 load(Data_Source+'Operator_P_5.mat',"ts");
 
