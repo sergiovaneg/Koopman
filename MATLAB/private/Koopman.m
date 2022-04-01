@@ -14,6 +14,7 @@ function [A,B] = Koopman(X,Y,U,alpha)
 %     B = M0(:,size(X,1)+1:end);
 
     for i=1:size(Y,1)
+        fprintf("\tCurrent observable: %i\n",i);
         m0 = V(i,:)/G;
 
 %         m = lsqr([X;U]',Y(i,:)',[],[],[],[],m0')';
@@ -21,8 +22,7 @@ function [A,B] = Koopman(X,Y,U,alpha)
         fun = @(m) sum((Y(i,:)-m*[X;U]).^2) ...
                 + alpha*sum(m.^2);
         options = optimset('Display','final', ...
-                            'PlotFcns',@optimplotfunccount, ...
-                            'TolFun', 1e-3, ...
+                            'TolFun',1e-3, ...
                             'TolX', 1e-3);
         m = fminsearch(fun,m0,options);
 

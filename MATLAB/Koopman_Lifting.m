@@ -19,7 +19,7 @@ end
 
 % P = 11;
 % [g_t,n] = Poly_Obs(z,P);
-M = 20;
+M = 100;
 X0 = 2*rand(size(z,1),M)-1;
 [g_t,n] = Spline_Radial_Obs(z,X0);
 
@@ -49,16 +49,19 @@ end
 
 %% Second Step - Operator calculation
 
-alpha = 1e-4;
-[A,B] = Koopman(Px,Py,U,alpha);
-% Generic way to recover original states
-C = Unobserver(Py,Z);
-% Recovery of original states independent from input
-D = zeros(size(Z,1),size(U,1));
-% save(sprintf(Data_Source+'Operator_P_%i.mat',P), ...
-%     "A","B","C","D","ts");
-save(sprintf(Data_Source+'Operator_M_%i.mat',M), ...
-    "A","B","C","D","ts","X0");
+for i=4:-1:0
+    alpha = 10^(-i);
+    fprintf("Current coefficient: %f\n", alpha);
+    [A,B] = Koopman(Px,Py,U,alpha);
+    % Generic way to recover original states
+    C = Unobserver(Py,Z);
+    % Recovery of original states independent from input
+    D = zeros(size(Z,1),size(U,1));
+    % save(sprintf(Data_Source+'Operator_P_%i.mat',P), ...
+    %     "A","B","C","D","ts");
+    save(sprintf(Data_Source+'Operator_alpha_%i.mat',i), ...
+        "A","B","C","D","ts","X0");
+end
 
 Lambda = eig(A);
 figure(1);
