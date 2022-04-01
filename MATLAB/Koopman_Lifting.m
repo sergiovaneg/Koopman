@@ -49,7 +49,7 @@ end
 
 %% Second Step - Operator calculation
 
-alpha = 0.001;
+alpha = 1e-4;
 [A,B] = Koopman(Px,Py,U,alpha);
 % Generic way to recover original states
 C = Unobserver(Py,Z);

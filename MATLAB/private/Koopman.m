@@ -14,14 +14,16 @@ function [A,B] = Koopman(X,Y,U,alpha)
 %     B = M0(:,size(X,1)+1:end);
 
     for i=1:size(Y,1)
-%         fun = @(m) sqrt((Y(i,:)-m*[X;U]).^2 ...
-%                         +(alpha/K)*norm(m,"fro")^2);
-        fun = @(m) (Y(i,:)-m*[X;U])*(Y(i,:)-m*[X;U])' ...
-                + alpha*norm(m,"fro");
         m0 = V(i,:)/G;
 
-%         m = lsqnonlin(fun,m0);
-        options = optimset('Display','final');
+%         m = lsqr([X;U]',Y(i,:)',[],[],[],[],m0')';
+
+        fun = @(m) sum((Y(i,:)-m*[X;U]).^2) ...
+                + alpha*sum(m.^2);
+        options = optimset('Display','final', ...
+                            'PlotFcns',@optimplotfunccount, ...
+                            'TolFun', 1e-3, ...
+                            'TolX', 1e-3);
         m = fminsearch(fun,m0,options);
 
         A(i,:) = m(1:size(X,1));
