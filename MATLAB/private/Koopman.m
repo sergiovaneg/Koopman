@@ -12,7 +12,13 @@ function [A,B] = Koopman(X,Y,U,alpha)
 %     M0 = V/G;
 %     A = M0(:,1:size(X,1));
 %     B = M0(:,size(X,1)+1:end);
-
+    
+    options = optimoptions(@fminunc, ...
+                            'Display', 'final', ...
+                            'UseParallel', true, ...
+                            'OptimalityTolerance', 1e-3, ...
+                            'StepTolerance', 1e-3, ...
+                            'MaxIterations', 250);
     for i=1:size(Y,1)
         fprintf("\tCurrent observable: %i\n",i);
         m0 = V(i,:)/G;
@@ -21,10 +27,8 @@ function [A,B] = Koopman(X,Y,U,alpha)
 
         fun = @(m) sum((Y(i,:)-m*[X;U]).^2) ...
                 + alpha*sum(m.^2);
-        options = optimset('Display','final', ...
-                            'TolFun',1e-3, ...
-                            'TolX', 1e-3);
-        m = fminsearch(fun,m0,options);
+
+        m = fminunc(fun,m0,options);
 
         A(i,:) = m(1:size(X,1));
         B(i,:) = m(size(X,1)+1:end);
