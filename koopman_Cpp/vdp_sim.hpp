@@ -24,6 +24,9 @@ private:
     time period;
     time ts;
 
+    std::vector<time> u_t;
+    std::vector<input_type> u;
+
     const input_type
     interp1d(const std::vector<time>& u_t,
             const std::vector<input_type>& u,
