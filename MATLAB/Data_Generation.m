@@ -23,7 +23,7 @@ for f=1:N_Sim
     mu = randn(1); % 0 for zero-mean noise
     u = sigma*randn(size(u_t)) + mu;
     z0 = 2*rand(2,1) - 1;
-    [~,z] = ode113(@(t,z) VanDerPol(t,z,u_t,u), u_t, z0);
+    [~,z] = ode45(@(t,z) VanDerPol(t,z,u_t,u), u_t, z0);
     
     z = (z + eta*randn(size(z)))';
     L = length(z)-1;

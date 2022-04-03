@@ -86,7 +86,7 @@ pub fn gen_data(n: i32, per: f64, ts: f64, dir: &str) {
     let path = Path::new(dir);
     create_dir_all(path).unwrap();
 
-    for i in 1..=n {
+    for i in 0..n {
         let system = VanDerPol{u_t: (0..=samples).map(|t| (t as f64)*ts).collect(),
                                 u: (0..=samples).map(|_| rng.sample(&noise)).collect()};
         let y0 = State::from_vec((0..2).map(|_| rng.sample(&range)).collect());
