@@ -49,7 +49,7 @@ vdp_sim::generate_data(const std::string& dir, size_t n)
         {
             data_stream << t << ",";
             for(const auto& e : x)
-                data_stream << e << ";";
+                data_stream << e << ",";
             data_stream << std::endl;
         };
 
@@ -67,7 +67,7 @@ vdp_sim::generate_data(const std::string& dir, size_t n)
         for(size_t j=0; j<u.size(); ++j){
             data_stream << u_t[j] << ",";
             for(const auto& e : u[j])
-                data_stream << e << ";";
+                data_stream << e << ",";
             data_stream << std::endl;
         }
         data_stream.close();
