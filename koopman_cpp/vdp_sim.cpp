@@ -9,7 +9,7 @@
 const vdp_sim::input_type
 vdp_sim::interp1d(const std::vector<time>& u_t,
                 const std::vector<input_type>& u,
-                const time t)
+                time t)
 {
     const auto it = std::lower_bound(u_t.cbegin(),
                             u_t.cend(),
@@ -26,7 +26,7 @@ vdp_sim::interp1d(const std::vector<time>& u_t,
         for(size_t i=0; i < result.size(); ++i)
             result[i] = u[idx-1][i]
                 + ((u[idx][i]-u[idx-1][i])/dt)
-                    *(t-(u_t[idx]-u[idx-1][i]));
+                    *(t-u_t[idx-1]);
         
         return result;
     }
@@ -40,7 +40,18 @@ vdp_sim::generate_data(const std::string& dir, size_t n)
     std::normal_distribution<> noise{0., 1.};
     std::uniform_real_distribution<> initial{-1.,1.};
 
-    boost::numeric::odeint::runge_kutta4<state_type> rk;
+    boost::numeric::odeint::runge_kutta4<state_type> stepper;
+    auto vdp =
+        [this](const state_type &x,
+                state_type &dxdt,
+                time t)
+        {
+            input_type aux = interp1d(u_t, u, t);
+
+            dxdt[0] = 2.*x[1];
+            dxdt[1] = -0.8*x[0] + 2.*x[1]
+                    - 10.*x[0]*x[0]*x[1] + aux[0];
+        };
 
     std::filesystem::create_directory(dir);
 
@@ -72,26 +83,14 @@ vdp_sim::generate_data(const std::string& dir, size_t n)
         }
         data_stream.close();
 
-        auto vdp =
-            [this](const state_type &x,
-                    state_type &dxdt,
-                    const time t)
-            {
-                input_type aux = interp1d(u_t, u, t);
-
-                dxdt[0] = 2.*x[1];
-                dxdt[1] = -0.8*x[0] + 2.*x[1]
-                        - 10.*std::pow(x[0],2)*x[1] + aux[0];
-            };
-
         state_type x0;
-        std::for_each(x0.begin(),x0.end(),
-            [&initial, &gen](auto& e){e = initial(gen);});
+        std::generate(x0.begin(),x0.end(),
+            [&initial, &gen](){return initial(gen);});
 
         data_stream.open(
             dir+"Output_"+std::to_string(i)+".csv");
         boost::numeric::odeint::
-            integrate_const(rk,
+            integrate_const(stepper,
                             vdp,
                             x0,
                             0.0,
