@@ -1,9 +1,11 @@
 #ifndef VDP_SIM_H
 #define VDP_SIM_H
 
+#include <cmath>
+#include <fstream>
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <boost/array.hpp>
 
@@ -16,9 +18,20 @@ public:
 
     vdp_sim(time _period, time _ts) :
         period{_period},
-        ts{_ts} {};
+        ts{_ts}
+    {
+        size_t K = std::ceil(period/ts);
+        u_t = std::vector<time>(K);
 
-    void generate_data(const std::string& dir, int n);
+        double t = 0.;
+        std::generate(u_t.begin(),
+                    u_t.end(),
+                    [&t, _ts] () {return t+=_ts;});
+
+        u = std::vector<input_type>(K);
+    }
+
+    void generate_data(const std::string& dir, size_t n);
 
 private:
     time period;
@@ -27,15 +40,12 @@ private:
     std::vector<time> u_t;
     std::vector<input_type> u;
 
+    std::ofstream data_stream; 
+
     const input_type
     interp1d(const std::vector<time>& u_t,
             const std::vector<input_type>& u,
             const time t);
-
-    void
-    VanDerPol(const state_type &x,
-            state_type &dxdt,
-            double t);
 };
 
 #endif
