@@ -63,7 +63,7 @@ D = zeros(size(Z,1),size(U,1));
 save(sprintf(Data_Source+'Operator_alpha_none.mat'), ...
     "A","B","C","D","ts","X0");
 
-for i=1:-1:0
+for i=[4,3,2,0]
     alpha = 10^(-i);
     fprintf("Current coefficient: %f\n", alpha);
     [A,B] = Koopman(Px,Py,U,alpha);

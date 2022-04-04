@@ -17,7 +17,7 @@ load(Data_Source+'Polynomic/Operator_alpha_none.mat',"ts");
 
 T = 3;
 
-z0 = 4*rand(2,1) - 2;
+z0 = 2*rand(2,1) - 1;
 sigma = randn(1);
 u_t = 0:ts:T;
 u = 0 * cos(u_t);
