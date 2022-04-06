@@ -19,7 +19,7 @@ end
 
 % P = 11;
 % [g_t,n] = Poly_Obs(z,P);
-M = 100;
+M = 20;
 X0 = 2*rand(size(z,1),M)-1;
 [g_t,n] = Spline_Radial_Obs(z,X0);
 
@@ -49,7 +49,7 @@ end
 
 %% Second Step - Operator calculation
 
-alpha = 0.;
+alpha = 0.000;
 [A,B] = Koopman(Px,Py,U,alpha);
 % Generic way to recover original states
 C = Unobserver(Py,Z);
@@ -95,7 +95,27 @@ hold off;
 
 %% Fourth Step - Eigen Approx
 
-Phi = g_p(:,1)'*Xi;
-V = (Xi\C')';
-V*Mu*Phi'+C*B*u(:,1)
-g_p(1:2,2)
+error_obs = zeros(L,1);
+error_sts = zeros(L,1);
+
+Phi = Xi'*g_p(:,1);
+% V = (Xi\C')';
+g_eig = Xi'\Phi;
+
+error_obs(1) = norm(g_eig-g_p(:,1)) / (norm(g_p(:,1))+eps);
+error_sts(1) = norm(C*g_eig-z_p(:,1)) / (norm(z_p(:,1))+eps);
+
+for i=1:L-1
+    Phi = Mu*Phi + Xi'*B*u(:,i);
+    g_eig = Xi'\Phi;
+
+    error_obs(i+1) = norm(g_eig-g_p(:,i+1)) / (norm(g_p(:,i+1))+eps);
+    error_sts(i+1) = norm(C*g_eig-z_p(:,i+1)) / (norm(z_p(:,i+1))+eps);
+end
+
+figure(3);
+plot(0:L-1,error_obs);
+hold on;
+plot(0:L-1,error_sts);
+legend("Normalized observable error","Normalized state error");
+hold off;
