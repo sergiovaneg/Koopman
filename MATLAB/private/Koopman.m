@@ -23,10 +23,14 @@ function [A,B] = Koopman(X,Y,U,alpha)
 %         m = lsqr([X;U]',Y(i,:)',[],[],[],[],m0')';
         
         if alpha>0.0
-            fun = @(m) sum((Y(i,:)-m*[X;U]).^2) ...
-                    + alpha*sum(m.^2);
-        
-            m = fminunc(fun,m0,options);
+%             fun = @(m) sum((Y(i,:)-m*[X;U]).^2) ...
+%                     + alpha*sum(m.^2);
+%         
+%             m = fminunc(fun,m0,options);
+            cvx_begin
+                variable m(len(m0))
+                
+            cvx_end
         elseif alpha==0.0
             m = m0;
         end
