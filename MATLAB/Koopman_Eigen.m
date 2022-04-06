@@ -19,7 +19,7 @@ end
 
 % P = 11;
 % [g_t,n] = Poly_Obs(z,P);
-M = 50;
+M = 100;
 X0 = 2*rand(size(z,1),M)-1;
 [g_t,n] = Spline_Radial_Obs(z,X0);
 
@@ -49,14 +49,14 @@ end
 
 %% Second Step - Operator calculation
 
-alpha = 0.01;
+alpha = 0.;
 [A,B] = Koopman(Px,Py,U,alpha);
 % Generic way to recover original states
 C = Unobserver(Py,Z);
 % Recovery of original states independent from input
 D = zeros(size(Z,1),size(U,1));
 
-[Xi,Mu] = eig(A);
+[Xi,Mu] = eig(A');
 
 figure(1);
 scatter(real(diag(Mu)),imag(diag(Mu)));
@@ -95,4 +95,7 @@ hold off;
 
 %% Fourth Step - Eigen Approx
 
-phi = 
+Phi = g_p(:,1)'*Xi;
+V = (Xi\C')';
+V*Mu*Phi'+C*B*u(:,1)
+g_p(1:2,2)
