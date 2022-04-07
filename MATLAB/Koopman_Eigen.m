@@ -19,7 +19,7 @@ end
 
 % P = 11;
 % [g_t,n] = Poly_Obs(z,P);
-M = 100;
+M = 20;
 X0 = 2*rand(size(z,1),M)-1;
 [g_t,n] = Spline_Radial_Obs(z,X0);
 
@@ -90,8 +90,6 @@ end
 z_p = C*g_p;
 
 scatter(z_p(1,:),z_p(2,:),36*exp(-markerDecay*(0:L-1)));
-legend("Original Data","Trajectory Prediction (full-operator)");
-hold off;
 
 %% Fourth Step - Eigen Discrimination
 
@@ -102,23 +100,26 @@ Mu_r = Mu(idx_r,idx_r);
 
 %% Fifth Step - Eigen Approx
 
-error_obs = zeros(L,1);
-error_sts = zeros(L,1);
+g_eig = zeros(size(g_t,1),L);
 
 Phi = Xi_r'*g_p(:,1);
 % V = (Xi\C')';
-g_eig = Xi_r'\Phi;
-
-error_obs(1) = norm(g_eig-g_p(:,1)) / (norm(g_p(:,1))+eps);
-error_sts(1) = norm(C*g_eig-z_p(:,1)) / (norm(z_p(:,1))+eps);
+g_eig(:,1) = Xi_r'\Phi;
 
 for i=1:L-1
     Phi = Mu_r*Phi + Xi_r'*B*u(:,i);
-    g_eig = Xi_r'\Phi;
-
-    error_obs(i+1) = norm(g_eig-g_p(:,i+1)) / (norm(g_p(:,i+1))+eps);
-    error_sts(i+1) = norm(C*g_eig-z_p(:,i+1)) / (norm(z_p(:,i+1))+eps);
+    g_eig(:,i+1) = Xi_r'\Phi;
 end
+
+z_eig = C*g_eig;
+error_obs = vecnorm(g_eig-g_p) ./ (vecnorm(g_p)+eps);
+error_sts = vecnorm(z_eig-z_p) ./ (vecnorm(z_p)+eps);
+
+scatter(z_eig(1,:),z_eig(2,:),36*exp(-markerDecay*(0:L-1)));
+legend("Original Data", ...
+    "Trajectory Prediction (full-operator)", ...
+    "Trajectory Prediction - (Eigen aproximation)");
+hold off;
 
 figure(3);
 plot(0:L-1,error_obs);
