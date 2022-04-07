@@ -93,21 +93,28 @@ scatter(z_p(1,:),z_p(2,:),36*exp(-markerDecay*(0:L-1)));
 legend("Original Data","Trajectory Prediction (full-operator)");
 hold off;
 
-%% Fourth Step - Eigen Approx
+%% Fourth Step - Eigen Discrimination
+
+thr = 0.5;
+idx_r = diag(Mu)>thr;
+Xi_r = Xi(:,idx_r);
+Mu_r = Mu(idx_r,idx_r);
+
+%% Fifth Step - Eigen Approx
 
 error_obs = zeros(L,1);
 error_sts = zeros(L,1);
 
-Phi = Xi'*g_p(:,1);
+Phi = Xi_r'*g_p(:,1);
 % V = (Xi\C')';
-g_eig = Xi'\Phi;
+g_eig = Xi_r'\Phi;
 
 error_obs(1) = norm(g_eig-g_p(:,1)) / (norm(g_p(:,1))+eps);
 error_sts(1) = norm(C*g_eig-z_p(:,1)) / (norm(z_p(:,1))+eps);
 
 for i=1:L-1
-    Phi = Mu*Phi + Xi'*B*u(:,i);
-    g_eig = Xi'\Phi;
+    Phi = Mu_r*Phi + Xi_r'*B*u(:,i);
+    g_eig = Xi_r'\Phi;
 
     error_obs(i+1) = norm(g_eig-g_p(:,i+1)) / (norm(g_p(:,i+1))+eps);
     error_sts(i+1) = norm(C*g_eig-z_p(:,i+1)) / (norm(z_p(:,i+1))+eps);
