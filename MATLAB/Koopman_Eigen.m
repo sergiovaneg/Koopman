@@ -19,7 +19,7 @@ end
 
 % P = 11;
 % [g_t,n] = Poly_Obs(z,P);
-M = 20;
+M = 300;
 X0 = 2*rand(size(z,1),M)-1;
 [g_t,n] = Spline_Radial_Obs(z,X0);
 
@@ -49,14 +49,14 @@ end
 
 %% Second Step - Operator calculation
 
-alpha = 0.001;
+alpha = 0.000;
 [A,B] = Koopman(Px,Py,U,alpha);
 % Generic way to recover original states
 C = Unobserver(Py,Z);
 % Recovery of original states independent from input
 D = zeros(size(Z,1),size(U,1));
 
-[Xi,Mu] = eig(A');
+[~,Mu,Xi] = eig(A);
 
 figure(1);
 scatter(real(diag(Mu)),imag(diag(Mu)));
@@ -66,15 +66,15 @@ hold off;
 
 % save(sprintf(Data_Source+'Operator_P_%i.mat',P), ...
 %     "A","B","C","D","ts");
-save(sprintf(Data_Source+'Operator_M_%i.mat',M), ...
-    "A","B","C","D","ts","X0");
+% save(sprintf(Data_Source+'Operator_M_%i.mat',M), ...
+%     "A","B","C","D","ts","X0");
 
 %% Third Step - Approximation
 
 load(Data_Source+data(1).name);
 L = length(0:ts:T);
 
-markerDecay = 0.001;
+markerDecay = 0.005;
 figure(2);
 scatter(z(1,:),z(2,:),36*exp(-markerDecay*(0:L-1)));
 hold on;
@@ -93,7 +93,7 @@ scatter(z_p(1,:),z_p(2,:),36*exp(-markerDecay*(0:L-1)));
 
 %% Fourth Step - Eigen Discrimination
 
-thr = 0.85;
+thr = 0.4;
 idx_r = abs(diag(Mu))>thr;
 Xi_r = Xi(:,idx_r);
 Mu_r = Mu(idx_r,idx_r);
@@ -115,7 +115,7 @@ z_eig = C*g_eig;
 error_obs = vecnorm(g_eig-g_p) ./ (vecnorm(g_p)+eps);
 error_sts = vecnorm(z_eig-z_p) ./ (vecnorm(z_p)+eps);
 
-scatter(z_eig(1,:),z_eig(2,:),36*exp(-markerDecay*(0:L-1)));
+scatter(real(z_eig(1,:)),real(z_eig(2,:)),36*exp(-markerDecay*(0:L-1)));
 legend("Original Data", ...
     "Trajectory Prediction (full-operator)", ...
     "Trajectory Prediction - (Eigen aproximation)");
