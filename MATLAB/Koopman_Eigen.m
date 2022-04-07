@@ -4,7 +4,7 @@ close all;
 clearvars;
 clc;
 rng(0,'threefry');
-Data_Source = "~/Documents/Thesis/VanDerPol_Unsteady_Input/";
+Data_Source = "~/Documents/Thesis/VanDerPol_Noisy_Unsteady_Input/";
 
 %% First Step - System observation
 
@@ -19,7 +19,7 @@ end
 
 % P = 11;
 % [g_t,n] = Poly_Obs(z,P);
-M = 20;
+M = 100;
 X0 = 2*rand(size(z,1),M)-1;
 [g_t,n] = Spline_Radial_Obs(z,X0);
 
@@ -49,7 +49,7 @@ end
 
 %% Second Step - Operator calculation
 
-alpha = 0.000;
+alpha = 0.001;
 [A,B] = Koopman(Px,Py,U,alpha);
 % Generic way to recover original states
 C = Unobserver(Py,Z);
