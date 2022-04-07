@@ -13,9 +13,9 @@ function [A,B] = Koopman(X,Y,U,alpha)
 %     A = M0(:,1:size(X,1));
 %     B = M0(:,size(X,1)+1:end);
     
-    options = optimoptions(@fminunc, ...
-                        'Display', 'none', ...
-                        'UseParallel', true);
+%     options = optimoptions(@fminunc, ...
+%                         'Display', 'none', ...
+%                         'UseParallel', true);
     for i=1:size(Y,1)
         m0 = V(i,:)/G;
 
@@ -26,6 +26,11 @@ function [A,B] = Koopman(X,Y,U,alpha)
 %                     + alpha*sum(m.^2);
 %         
 %             m = fminunc(fun,m0,options);
+
+%             C = [[X;U] sqrt(alpha)*m0'];
+%             d = [Y(i,:) 0];
+%             m = cplexlsqlin(C',d',[],[],[],[],[],[],m0')';
+
             cvx_begin
                 variable m(size(m0))
                 minimize (norm(m*[X;U]-Y(i,:)) + alpha*norm(m))
