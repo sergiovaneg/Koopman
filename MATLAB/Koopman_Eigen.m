@@ -95,8 +95,8 @@ hold off;
 
 %% Fourth Step - Eigen Discrimination
 
-thr = 0.5;
-idx_r = diag(Mu)>thr;
+thr = 0.85;
+idx_r = abs(diag(Mu))>thr;
 Xi_r = Xi(:,idx_r);
 Mu_r = Mu(idx_r,idx_r);
 
