@@ -36,17 +36,26 @@ title("Clean training data");
 hold on;
 
 load(Data_Source+'VanDerPol_Unsteady_Input/Radial/Operator_alpha_none.mat');
+figure(2);
+Lambda = eig(A);
+scatter(real(Lambda), imag(Lambda));
+title("Clean training data");
+hold on;
+
 g_p = zeros(size(B,1),L);
 g_p(:,1) = Spline_Radial_Obs(z(:,1),X0);
 for j=1:L-1
     g_p(:,j+1) = A*g_p(:,j) + B*u(:,j);
 end
 z_p = C*g_p;
+
+figure(1);
 scatter(z_p(1,:),z_p(2,:),36*exp(-markerDecay*(0:L-1)),'filled');
 
 for i=1:length(Alpha)
     load(sprintf(Data_Source ...
         +'VanDerPol_Unsteady_Input/Radial/Operator_alpha_%i.mat',Alpha(i)));
+
     g_p = zeros(size(B,1),L);
     g_p(:,1) = Spline_Radial_Obs(z(:,1),X0);
     
@@ -55,6 +64,8 @@ for i=1:length(Alpha)
     end
     
     z_p = C*g_p;
+    
+    figure(1);
     scatter(z_p(1,:),z_p(2,:),36*exp(-markerDecay*(0:L-1)));
 end
 legend(["Reference"; ...
@@ -63,20 +74,36 @@ legend(["Reference"; ...
     'Location','southeast');
 hold off;
 
-
 figure(2);
+Lambda = eig(A);
+scatter(real(Lambda), imag(Lambda));
+legend(["Alpha=0"; ...
+    "Alpha=1"], ...
+    'Location','southwest');
+hold off;
+
+
+figure(3);
 scatter(z(1,:),z(2,:),36*exp(-markerDecay*(0:L-1)),'filled');
 title("Noisy training data");
 hold on;
 
 load(Data_Source+ ...
     'VanDerPol_Noisy_Unsteady_Input/Radial/Operator_alpha_none.mat');
+figure(4);
+Lambda = eig(A);
+scatter(real(Lambda), imag(Lambda));
+title("Noisy training data");
+hold on;
+
 g_p = zeros(size(B,1),L);
 g_p(:,1) = Spline_Radial_Obs(z(:,1),X0);
 for j=1:L-1
     g_p(:,j+1) = A*g_p(:,j) + B*u(:,j);
 end
 z_p = C*g_p;
+
+figure(3);
 scatter(z_p(1,:),z_p(2,:),36*exp(-markerDecay*(0:L-1)),'filled');
 
 for i=1:length(Alpha)
@@ -91,10 +118,20 @@ for i=1:length(Alpha)
     end
     
     z_p = C*g_p;
+
+    figure(3);
     scatter(z_p(1,:),z_p(2,:),36*exp(-markerDecay*(0:L-1)));
 end
 legend(["Reference"; ...
     "Alpha=0"; ...
     repmat("Alpha = 10^-",length(Alpha),1)+int2str(Alpha)], ...
     'Location','southeast');
+hold off;
+
+figure(4);
+Lambda = eig(A);
+scatter(real(Lambda), imag(Lambda));
+legend(["Alpha=0"; ...
+    "Alpha=1"], ...
+    'Location','southwest');
 hold off;
