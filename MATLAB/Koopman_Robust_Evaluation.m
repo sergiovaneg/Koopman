@@ -33,7 +33,6 @@ markerDecay = 0.005;
 figure(1);
 scatter(z(1,:),z(2,:),36*exp(-markerDecay*(0:L-1)),'filled');
 title("Clean training data");
-xlim([-1 1]); ylim([-1 1]);
 hold on;
 
 load(Data_Source+'VanDerPol_Unsteady_Input/Radial/Operator_alpha_none.mat');
@@ -60,14 +59,14 @@ for i=1:length(Alpha)
 end
 legend(["Reference"; ...
     "Alpha=0"; ...
-    repmat("Alpha=10^-",length(Alpha),1)+int2str(Alpha)]);
+    repmat("Alpha=10^-",length(Alpha),1)+int2str(Alpha)], ...
+    'Location','southeast');
 hold off;
 
 
 figure(2);
 scatter(z(1,:),z(2,:),36*exp(-markerDecay*(0:L-1)),'filled');
 title("Noisy training data");
-xlim([-1 1]); ylim([-1 1]);
 hold on;
 
 load(Data_Source+ ...
@@ -96,5 +95,6 @@ for i=1:length(Alpha)
 end
 legend(["Reference"; ...
     "Alpha=0"; ...
-    repmat("Alpha = 10^-",length(Alpha),1)+int2str(Alpha)]);
+    repmat("Alpha = 10^-",length(Alpha),1)+int2str(Alpha)], ...
+    'Location','southeast');
 hold off;
