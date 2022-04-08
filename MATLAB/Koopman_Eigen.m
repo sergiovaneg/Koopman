@@ -19,7 +19,7 @@ end
 
 % P = 11;
 % [g_t,n] = Poly_Obs(z,P);
-M = 300;
+M = 50;
 X0 = 2*rand(size(z,1),M)-1;
 [g_t,n] = Spline_Radial_Obs(z,X0);
 
@@ -93,24 +93,21 @@ scatter(z_p(1,:),z_p(2,:),36*exp(-markerDecay*(0:L-1)));
 
 %% Fourth Step - Eigen Discrimination
 
-thr = 0.4;
+thr = 0.1;
 idx_r = abs(diag(Mu))>thr;
 Xi_r = Xi(:,idx_r);
 Mu_r = Mu(idx_r,idx_r);
 
 %% Fifth Step - Eigen Approx
 
-g_eig = zeros(size(g_t,1),L);
-
-Phi = Xi_r'*g_p(:,1);
-% V = (Xi\C')';
-g_eig(:,1) = Xi_r'\Phi;
+Phi = zeros(length(idx_r),L);
+Phi(:,1) = Xi_r'*g_p(:,1);
 
 for i=1:L-1
-    Phi = Mu_r*Phi + Xi_r'*B*u(:,i);
-    g_eig(:,i+1) = Xi_r'\Phi;
+    Phi(:,i+1) = Mu_r*Phi(:,i) + Xi_r'*B*u(:,i);
 end
 
+g_eig = Xi_r'\Phi;
 z_eig = C*g_eig;
 error_obs = vecnorm(g_eig-g_p) ./ (vecnorm(g_p)+eps);
 error_sts = vecnorm(z_eig-z_p) ./ (vecnorm(z_p)+eps);
