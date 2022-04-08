@@ -4,7 +4,7 @@ close all;
 clearvars;
 clc;
 rng(0,'threefry');
-Data_Source = "~/Documents/Thesis/VanDerPol_Noisy_Unsteady_Input/";
+Data_Source = "~/Documents/Thesis/VanDerPol_Unsteady_Input/";
 
 %% First Step - System observation
 
@@ -49,6 +49,7 @@ for f=2:length(data)
 end
 
 %% Second Step - Operator calculation
+tic
 
 alpha = 0;
 fprintf("Current coefficient: %f\n", alpha);
@@ -77,6 +78,8 @@ for i=4:-1:0
     save(sprintf(Data_Source+'Operator_alpha_%i.mat',i), ...
         "A","B","C","D","ts","X0");
 end
+
+toc
 
 Lambda = eig(A);
 figure(1);
