@@ -15,7 +15,7 @@ J = 0.5; % 0.5 [Kg m²]
 
 %% DC Motor - Model
 
-A = [-b/J K/J
+A = [-b/J K/J;
      -K/L -R/L];
 B = [0
      1/L];
@@ -37,9 +37,21 @@ DC_Motor.OutputUnit = DC_Motor.StateUnit;
 
 %% DC Motor - MPC Parameters
 
-DC_Motor = setmpcsignals(DC_Motor, 'MV', 1, 'MO', 2, 'UO', 1);
+DC_Motor = setmpcsignals(DC_Motor, 'UO', 1);
 damp(DC_Motor);
 step(DC_Motor);
 
 old_status = mpcverbosity('off');
 DC_Motor_MPC = mpc(DC_Motor, 0.1);
+get(DC_Motor_MPC);
+%review(DC_Motor_MPC);
+
+% DC_Motor_MPC.MV.Min = -1.5;
+% DC_Motor_MPC.MV.Max = 1.5;
+
+%% DC Motor - MPC Sim
+
+T = 20;
+r = [0 0;
+    0 1];
+sim(DC_Motor_MPC, T, r);
