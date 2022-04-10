@@ -3,20 +3,21 @@
 close all;
 clearvars;
 clc;
-Data_Source = "~/Documents/Thesis/VanDerPol_Unsteady_Input/";
+Data_Source = "~/Documents/Thesis/VanDerPol_Noisy_Unsteady_Input/Radial/";
 
 %% Operator retrieval
 
-M = 150;
-load(sprintf(Data_Source+'Operator_M_%i.mat',M));
+alpha = 2;
+load(sprintf(Data_Source+'Operator_alpha_%i.mat',alpha));
 
 VanDerPol = ss(A,B,C,D,ts);
 step(VanDerPol);
 
-predHorizon = 10;
-ctrlHorizon = 2;
-mpcobj = mpc(VanDerPol,ts,predHorizon,ctrlHorizon);
+mpcobj = mpc(VanDerPol,ts);
+mpcobj.PredictionHorizon = 20;
+% review(mpcobj);
 
-r = [0 1;0 1];
-T = 100;
+r = [-1 1;
+    0 0];
+T = 1e4;
 sim(mpcobj,T,r);

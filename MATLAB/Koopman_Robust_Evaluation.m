@@ -17,10 +17,12 @@ load(Data_Source+ ...
 
 T = 10;
 
-z0 = 2*rand(2,1) - 1;
+% z0 = 2*rand(2,1) - 1;
+z0 = [0;0];
 sigma = randn(1);
 u_t = 0:ts:T;
-u = 0 * cos(u_t);
+%u = 0 * cos(u_t);
+u = ones(size(u_t));
 
 [t,z] = ode113(@(t,z) VanDerPol(t,z,u_t,u), u_t, z0);
 z = z';
