@@ -2,6 +2,7 @@ import numpy as np
 from scipy.integrate import solve_ivp
 from scipy.interpolate import interp1d
 import os,sys
+import csv
 
 n = 100
 
@@ -47,8 +48,10 @@ for i in range(n):
     x = sol.y;
 
     with open(dir+"Output_"+str(i)+".csv",'w') as f:
+        csv_writer = csv.writer(f);
         for j in range(len(t)):
-            print(str(t[j])+",",file=f,end="")
-            for k in range(len(x0)):
-                print(str(x[k,j])+",",file=f,end="")
-            print(file=f)
+            csv_writer.writerow([t[j],*x[:,j]]);
+            #print(str(t[j])+",",file=f,end="")
+            #for k in range(len(x0)):
+                #print(str(x[k,j])+",",file=f,end="")
+            #print(file=f)
