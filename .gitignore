@@ -55,3 +55,8 @@ MATLAB/*.mat
 *.exe
 *.out
 *.app
+
+
+## Python
+# Cache directory
+__pycache__/
