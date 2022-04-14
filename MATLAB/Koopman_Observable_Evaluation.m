@@ -22,7 +22,7 @@ sigma = randn(1);
 u_t = 0:ts:T;
 u = 0 * cos(u_t);
 
-[t,z] = ode113(@(t,z) VanDerPol(t,z,u_t,u), u_t, z0);
+[t,z] = ode45(@(t,z) VanDerPol(t,z,u_t,u), u_t, z0);
 z = z';
 L = length(0:ts:T);
 
