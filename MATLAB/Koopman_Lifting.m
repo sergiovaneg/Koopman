@@ -17,9 +17,7 @@ for f=1:length(data)
     K = K+L; 
 end
 
-% P = 11;
-% [g_t,n] = Poly_Obs(z,P);
-M = 100;
+M = 5;
 X0 = 2*rand(size(z,1),M)-1;
 [g_t,n] = Spline_Radial_Obs(z,X0);
 
@@ -37,7 +35,6 @@ idx = L;
 for f=2:length(data)
     load(Data_Source+data(f).name);
 
-%     [g_t,~] = Poly_Obs(z,P);
     [g_t,~] = Spline_Radial_Obs(z,X0);
 
     Px(:,idx+1:idx+L) = g_t(:,1:end-1);
@@ -59,9 +56,7 @@ C = Unobserver(Py,Z);
 % Recovery of original states independent from input
 D = zeros(size(Z,1),size(U,1));
 
-% save(sprintf(Data_Source+'Operator_alpha_none.mat'), ...
-%     "A","B","C","D","ts");
-save(sprintf(Data_Source+'Operator_alpha_none.mat'), ...
+save(sprintf(Data_Source+'Operator_M_%i_alpha_none.mat',M), ...
     "A","B","C","D","ts","X0");
 
 for i=4:-1:0
@@ -73,9 +68,7 @@ for i=4:-1:0
     % Recovery of original states independent from input
     D = zeros(size(Z,1),size(U,1));
 
-%     save(sprintf(Data_Source+'Operator_alpha_%i.mat',i), ...
-%         "A","B","C","D","ts");
-    save(sprintf(Data_Source+'Operator_alpha_%i.mat',i), ...
+    save(sprintf(Data_Source+'Operator_M_%i_alpha_%i.mat',M,i), ...
         "A","B","C","D","ts","X0");
 end
 
@@ -99,8 +92,6 @@ scatter(z(1,:),z(2,:),36*exp(-markerDecay*(0:L-1)));
 hold on;
 
 g_p = zeros(size(g_t,1),L);
-
-% [g_p(:,1),~] = Poly_Obs(z(:,1),P);
 [g_p(:,1),~] = Spline_Radial_Obs(z(:,1),X0);
 
 for i=1:L-1
