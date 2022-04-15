@@ -3,11 +3,11 @@
 close all;
 clearvars;
 clc;
-Data_Source = "~/Documents/Thesis/VanDerPol_Noisy_Unsteady_Input/";
+Data_Source = "~/Documents/Thesis/VanDerPol_Unsteady_Input/";
 
 %% Operator retrieval
 
-K = 100;
+K = 1e3;
 M = 5:5:30;
 Alpha = 4:-1:0;
 load(Data_Source+'Radial/Operator_M_5_alpha_none.mat',"ts");
