@@ -1,13 +1,12 @@
 #!/usr/bin/python3
 
-from cmath import inf
 import numpy as np
 from docplex.mp.model import Model
-import glob
+from scipy.io import loadmat,savemat
 
+"""
 import csv
-
-data_source = "/home/sergiovaneg/Documents/Thesis/Python_Data/";
+import glob
 
 X=[];
 Y=[];
@@ -29,12 +28,34 @@ for filename in glob.glob(data_source + "Output_*.csv"):
         Y.append(np.array(aux[1:]));
 X = np.concatenate(X);
 Y = np.concatenate(Y);
+"""
 
-mdl = Model('my_test');
-aux = mdl.infinity;
-coeffs = [1,2,3];
-x = mdl.continuous_var_list(range(3),0, None, 'x');
+data_source = "/home/sergiovaneg/Documents/Thesis/Python_Data/";
 
-mdl.set_objective('min',mdl.sumsq((x[i]-coeffs[i]) for i in range(3)) + 0.001*mdl.sumsq(x));
-mdl.solve();
-mdl.print_solution();
+ml_data = loadmat(data_source+"input.mat");
+Px = ml_data['Px'];
+Py = ml_data['Py'];
+U = ml_data['U'];
+
+alpha = 1.e-3;
+A = np.zeros((len(Py),len(Px)));
+B = np.zeros((len(Py),len(U)));
+
+for i in range(len(Py)):
+    mdl = Model('Koopman');
+    mdl.log_output = True;
+
+    a = mdl.continuous_var_list(range(len(Px)),-mdl.infinity,None,'a');
+    b = mdl.continuous_var_list(range(len(U)),-mdl.infinity,None,'b');
+    mdl.set_objective('min',
+        mdl.sumsq(Py[i,j]-sum(a[k]*Px[k,j] for k in range(len(Px)))-sum(b[k]*U[k,j] for k in range(len(U)))
+            for j in range(len(Py[i])))/len(Py[i])
+        + alpha*(mdl.sumsq(a)+mdl.sumsq(b))/len(Py[i]));
+
+    mdl.solve();
+    mdl.print_solution();
+    A[i] = a;
+    B[i] = b;
+
+mdic = {"A": A, "B": B};
+savemat(data_source + "output.mat", mdic);
