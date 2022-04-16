@@ -44,8 +44,8 @@ for i in range(len(Py)):
     a = mdl.continuous_var_list(range(len(Px)),-mdl.infinity,None,'a')
     b = mdl.continuous_var_list(range(len(U)),-mdl.infinity,None,'b')
     mdl.set_objective('min',
-        mdl.sumsq(Py[i,j]-sum(a[k]*Px[k,j] for k in range(len(Px)))-sum(b[k]*U[k,j] for k in range(len(U)))
-            for j in range(len(Py[i])))/len(Py[i])
+        mdl.sumsq((Py[i,j]-sum(a[k]*Px[k,j] for k in range(len(Px)))-sum(b[k]*U[k,j] for k in range(len(U))))/len(Py[i])
+            for j in range(len(Py[i])))
         + alpha*(mdl.sumsq(a)+mdl.sumsq(b))/len(Py[i]))
 
     mdl.solve()
