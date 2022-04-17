@@ -4,7 +4,7 @@ close all;
 clearvars;
 clc;
 rng(0,'threefry');
-Data_Source = "~/Documents/Thesis/VanDerPol_Noisy_Unsteady_Input/";
+Data_Source = "~/Documents/Thesis/VanDerPol_Unsteady_Input/";
 
 %% First Step - System observation
 
@@ -18,8 +18,7 @@ for f=1:length(data)
 end
 
 M = 5;
-% X0 = 2*rand(size(z,1),M)-1;
-X0 = Spiral_Centers(1.,M);
+X0 = 2*rand(size(z,1),M)-1;
 [g_t,n] = Spline_Radial_Obs(z,X0);
 
 Px = zeros(n,K);
