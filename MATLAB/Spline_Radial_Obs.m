@@ -8,8 +8,7 @@ function [g,n] = Spline_Radial_Obs(z,X0)
 
     for i=1:N
         x0 = X0(:,i);
-        g(i+n,:) = (vecnorm(z-x0)+sqrt(eps)).^2 ...
-                    .* log(eps+vecnorm(z-x0));
+        g(i+n,:) = vecnorm(z-x0).*log(vecnorm(z-x0).^vecnorm(z-x0));
     end
 
     n=n+N;
