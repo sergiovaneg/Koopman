@@ -4,7 +4,7 @@ close all;
 clearvars;
 clc;
 rng(0,'threefry');
-Data_Source = "~/Documents/Thesis/VanDerPol_Unsteady_Input/";
+Data_Source = "~/Documents/Thesis/VanDerPol_Noisy_Unsteady_Input/";
 
 %% First Step - System observation
 
@@ -56,7 +56,7 @@ C = Unobserver(Py,Z);
 % Recovery of original states independent from input
 D = zeros(size(Z,1),size(U,1));
 
-save(sprintf(Data_Source+'Operator_M_%i_alpha_none.mat',M), ...
+save(sprintf(Data_Source+'Radial/Operator_M_%i_alpha_none.mat',M), ...
     "A","B","C","D","ts","X0");
 
 for i=4:-1:0
@@ -68,7 +68,7 @@ for i=4:-1:0
     % Recovery of original states independent from input
     D = zeros(size(Z,1),size(U,1));
 
-    save(sprintf(Data_Source+'Operator_M_%i_alpha_%i.mat',M,i), ...
+    save(sprintf(Data_Source+'Radial/Operator_M_%i_alpha_%i.mat',M,i), ...
         "A","B","C","D","ts","X0");
 end
 
