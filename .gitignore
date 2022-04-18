@@ -14,11 +14,15 @@ Cargo.lock
 ## MATLAB
 # MATLAB temporary files
 **/*.asv
+**/*.slxc
 
 # MATLAB data files
 MATLAB/*.mat
 
-# VSCode configuration files
+# Simulink project files
+slprj/
+
+## VSCode configuration files
 .vscode/
 
 

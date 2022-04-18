@@ -37,12 +37,13 @@ DC_Motor.OutputUnit = DC_Motor.StateUnit;
 
 %% DC Motor - MPC Parameters
 
-DC_Motor = setmpcsignals(DC_Motor, 'UO', 1);
+DC_Motor = setmpcsignals(DC_Motor, 'UO', 2);
 damp(DC_Motor);
-step(DC_Motor);
+% step(DC_Motor);
 
 old_status = mpcverbosity('off');
-DC_Motor_MPC = mpc(DC_Motor, 0.1);
+DC_Motor_MPC = mpc(DC_Motor, 0.01);
+DC_Motor_MPC.PredictionHorizon = 10;
 get(DC_Motor_MPC);
 %review(DC_Motor_MPC);
 
@@ -51,7 +52,6 @@ get(DC_Motor_MPC);
 
 %% DC Motor - MPC Sim
 
-T = 20;
-r = [0 0;
-    0 1];
+T = 100;
+r = [1 0];
 sim(DC_Motor_MPC, T, r);
