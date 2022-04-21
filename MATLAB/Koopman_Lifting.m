@@ -4,7 +4,7 @@ close all;
 clearvars;
 clc;
 rng(0,'threefry');
-Data_Source = "~/Documents/Thesis/VanDerPol_Noisy_Unsteady_Input/";
+Data_Source = "~/Documents/Thesis/VanDerPol_Clean_Unsteady_Input/";
 
 %% First Step - System observation
 
@@ -17,7 +17,7 @@ for f=1:length(data)
 end
 
 load(Data_Source+data(randi(f)).name);
-M = 5;
+M = 30;
 % X0 = 2*rand(size(z,1),M)-1;
 X0 = z(:,randperm(L+1,M));
 [g_t,n] = Spline_Radial_Obs(z,X0);
@@ -53,7 +53,12 @@ alpha = 0;
 fprintf("Current coefficient: %f\n", alpha);
 [A,B] = Koopman(Px,Py,U,alpha);
 % Generic way to recover original states
-C = Unobserver(Py,Z);
+% C = Unobserver(Py,Z);
+% Original states recovered by convention
+% (the first n observers are the original states)
+C = zeros(size(Z,1),size(A,2));
+C(1:size(Z,1),1:size(Z,1)) = eye(size(Z,1));
+
 % Recovery of original states independent from input
 D = zeros(size(Z,1),size(U,1));
 
@@ -67,9 +72,10 @@ for i=4:-1:0
 
     % Generic way to recover original states
     % C = Unobserver(Py,Z);
+
     % Original states recovered by convention
     % (the first n observers are the original states)
-    C = zeros(size(A));
+    C = zeros(size(Z,1),size(A,2));
     C(1:size(Z,1),1:size(Z,1)) = eye(size(Z,1));
 
     % Recovery of original states independent from input
