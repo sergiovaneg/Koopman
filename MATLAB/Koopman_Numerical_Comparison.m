@@ -3,11 +3,11 @@
 close all;
 clearvars;
 clc;
-Data_Source = "~/Documents/Thesis/VanDerPol_Noisy_Unsteady_Input/";
+Data_Source = "~/Documents/Thesis/VanDerPol_Clean_Unsteady_Input/";
 
 %% Operator retrieval
 
-K = 1e3;
+K = 1e4;
 M = 5:5:30;
 Alpha = 4:-1:0;
 load(Data_Source+'Radial/Operator_M_5_alpha_none.mat',"ts");
@@ -17,7 +17,6 @@ Normalized_Error = zeros(length(M),1+length(Alpha),3);
 %% Trajectory generation
 
 T = .25;
-sigma = randn(1);
 u_t = 0.:ts:T;
 
 % Constant Input
@@ -197,3 +196,37 @@ writetable(Percentual_Error_Sine, ...
 writetable(Percentual_Error_Square, ...
     sprintf(Data_Source+"Tables/table_square_T_%.2f.csv",T), ...
     "WriteRowNames",true);
+
+%% Figures
+
+[X,Y] = meshgrid(10.^-Alpha,M);
+
+figure(1);
+surf(X,Y,Normalized_Error(:,2:end,1));
+set(gca,'xscale','log');
+title("Steady Input Error");
+xlabel("Alpha"); ylabel("M");
+view([-135 30]);
+saveas(gcf, ...
+    sprintf(Data_Source+"Figures/figure_steady_T_%.2f.png",T), ...
+    'png');
+
+figure(2);
+surf(X,Y,Normalized_Error(:,2:end,2));
+set(gca,'xscale','log');
+title("Steady Input Error");
+xlabel("Alpha"); ylabel("M");
+view([-135 30]);
+saveas(gcf, ...
+    sprintf(Data_Source+"Figures/figure_sine_T_%.2f.png",T), ...
+    'png');
+
+figure(3);
+surf(X,Y,Normalized_Error(:,2:end,3));
+set(gca,'xscale','log');
+title("Steady Input Error");
+xlabel("Alpha"); ylabel("M");
+view([-135 30]);
+saveas(gcf, ...
+    sprintf(Data_Source+"Figures/figure_square_T_%.2f.png",T), ...
+    'png');

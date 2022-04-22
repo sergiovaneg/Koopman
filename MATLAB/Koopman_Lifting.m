@@ -17,9 +17,9 @@ for f=1:length(data)
 end
 
 load(Data_Source+data(randi(f)).name);
-M = 30;
-% X0 = 2*rand(size(z,1),M)-1;
-X0 = z(:,randperm(L+1,M));
+M = 25;
+X0 = 2*rand(size(z,1),M)-1;
+% X0 = z(:,randperm(L+1,M));
 [g_t,n] = Spline_Radial_Obs(z,X0);
 
 Px = zeros(n,K);
