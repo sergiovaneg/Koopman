@@ -19,7 +19,7 @@ ovw = zeros(1,size(A,1)); ovw(2) = 1;
 mpcobj.Weights.OutputVariables = ovw;
 
 mpcobj.PredictionHorizon = 25;
-mpcobj.ControlHorizon = 10;
+mpcobj.ControlHorizon = 5;
 
 % review(mpcobj);
 % mpcobj.MV.Min = -10;
