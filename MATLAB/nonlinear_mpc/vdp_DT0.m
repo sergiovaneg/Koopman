@@ -1,5 +1,5 @@
 function xk1 = vdp_DT0(xk,uk,Ts)
-    M = 100;
+    M = 10;
     delta = Ts/M;
     xk1 = xk;
     for ct=1:M
