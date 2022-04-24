@@ -7,7 +7,7 @@ clc;
 %% Parameters
 
 Ts = 1e-2;
-Tf = 2000;
+Tf = 1000;
 
 nx = 2;
 ny = 2;

@@ -11,4 +11,4 @@ Data_Source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 
 Z = out.Z';
 U = [out.U_ref';out.U_vdp'];
-save(Data_Source + "data_clean.mat","U","Z","Ts");
+save(Data_Source + "data_noisy.mat","U","Z","Ts");

@@ -3,15 +3,14 @@
 close all;
 clearvars;
 clc;
-rng(0,'threefry');
 addpath("~/Koopman/MATLAB/");
 Data_Source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 
 %% First Step - System observation
 
-load(Data_Source + "data_clean.mat");
+load(Data_Source + "data_noisy.mat");
 
-M = 10;
+M = 20;
 X0 = 2*rand(size(Z,1),M)-1;
 
 [G,~] = Spline_Radial_Obs(Z,X0);
@@ -23,7 +22,7 @@ U = U(:,1:end-1);
 
 tic
 
-alpha = 1e-4;
+alpha = 1.e-3;
 [A,B] = Koopman(Px,Py,U,alpha);
 
 % Original states recovered by convention
