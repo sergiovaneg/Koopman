@@ -5,10 +5,10 @@ clc;
 
 %% Directory Selection
 
-Data_Source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
+data_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 
 %% Data extraction
 
 Z = out.Z';
 U = [out.U_ref';out.U_vdp'];
-save(Data_Source + "data_noisy.mat","U","Z","Ts");
+save(data_source + "data_noisy_second.mat","U","Z","Ts");

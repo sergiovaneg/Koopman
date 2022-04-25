@@ -25,7 +25,7 @@ nlobj.Model.StateFcn = "vdp_DT0";
 nlobj.Model.IsContinuousTime = false;
 nlobj.Model.NumberOfParameters = 1;
 nlobj.Model.OutputFcn = @(x,u,Ts) x;
-nlobj.Weights.OutputVariables = [0.1 1.];
+nlobj.Weights.OutputVariables = [1. 1.];
     
 x0 = rand(ny,1)*2-1;
 u0 = 1;
@@ -35,6 +35,8 @@ createParameterBus(nlobj, ...
     ['Simulink_VDP_nonlinear' '/vdpMPC'], ...
     'Ts_Bus',{Ts});
 
+save("~/Documents/Thesis/Nonlinear_MPC_VDP/vdp_mpc_balanced","nlobj","Ts");
+
 %% Reference Import
 
 data_source = "~/Documents/Thesis/VanDerPol_Clean_Unsteady_Input/";
@@ -42,6 +44,7 @@ data_files = dir(data_source + "*.mat");
 load(data_source+data_files(1).name,"z");
 Z = z(:,2:end);
 for i=2:length(data_files)
+    load(data_source+data_files(i).name,"z");
     Z = [Z z(:,2:end)];
 end
 R1 = array2timetable(Z(1,:)',"TimeStep",seconds(Ts));
