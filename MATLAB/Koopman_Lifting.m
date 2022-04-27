@@ -4,7 +4,7 @@ close all;
 clearvars;
 clc;
 rng(0,'threefry');
-Data_Source = "~/Documents/Thesis/VanDerPol_Clean_Unsteady_Input/";
+Data_Source = "~/Documents/Thesis/VanDerPol_Noisy_Unsteady_Input/";
 
 %% First Step - System observation
 
@@ -17,7 +17,7 @@ for f=1:length(data)
 end
 
 load(Data_Source+data(randi(f)).name);
-M = 25;
+M = 5;
 X0 = 2*rand(size(z,1),M)-1;
 % X0 = z(:,randperm(L+1,M));
 [g_t,n] = Spline_Radial_Obs(z,X0);
@@ -51,7 +51,7 @@ tic
 
 alpha = 0;
 fprintf("Current coefficient: %f\n", alpha);
-[A,B] = Koopman(Px,Py,U,alpha);
+[A,B] = Koopman(Px,Py,U,alpha,n-M);
 % Generic way to recover original states
 % C = Unobserver(Py,Z);
 % Original states recovered by convention
@@ -65,10 +65,10 @@ D = zeros(size(Z,1),size(U,1));
 save(sprintf(Data_Source+'Radial/Operator_M_%i_alpha_none.mat',M), ...
     "A","B","C","D","ts","X0");
 
-for i=4:-1:0
+for i=0:4
     alpha = 10^(-i);
     fprintf("Current coefficient: %f\n", alpha);
-    [A,B] = Koopman(Px,Py,U,alpha);
+    [A,B] = Koopman(Px,Py,U,alpha,n-M);
 
     % Generic way to recover original states
     % C = Unobserver(Py,Z);
@@ -87,7 +87,7 @@ end
 
 toc
 
-Lambda = eig(A);
+Lambda = eig(A(:,1:n-M));
 figure(1);
 scatter(real(Lambda),imag(Lambda));
 hold on;
@@ -104,11 +104,12 @@ figure(2);
 scatter(z(1,:),z(2,:),36*exp(-markerDecay*(0:L-1)));
 hold on;
 
-g_p = zeros(size(g_t,1),L);
+g_p = zeros(n,L);
 [g_p(:,1),~] = Spline_Radial_Obs(z(:,1),X0);
 
 for i=1:L-1
-    g_p(:,i+1) = A*g_p(:,i) + B*u(:,i);
+    g_p(1:2,i+1) = A*g_p(:,i) + B*u(:,i);
+    g_p(:,i+1) = Spline_Radial_Obs(g_p(1:2,i+1),X0);
 end
 
 z_p = C*g_p;

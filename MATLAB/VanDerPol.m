@@ -3,7 +3,7 @@ function dxdt = VanDerPol(t,x,u_t,u)
     %   Detailed explanation goes here
 
     % x1' = 2*x2
-    % x2' = -0.8*x1 + 2*x2 - 10*(x1^2)*x2 + u2
+    % x2' = -0.8*x1 + 2*x2 - 10*(x1^2)*x2 + u
 
     u = interp1(u_t,u,t);
     dxdt = [2*x(2);

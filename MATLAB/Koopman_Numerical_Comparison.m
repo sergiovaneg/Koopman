@@ -3,7 +3,7 @@
 close all;
 clearvars;
 clc;
-Data_Source = "~/Documents/Thesis/VanDerPol_Noisy_Unsteady_Input/";
+Data_Source = "~/Documents/Thesis/VanDerPol_Clean_Unsteady_Input/";
 
 %% Operator retrieval
 
@@ -16,7 +16,7 @@ Normalized_Error = zeros(length(M),1+length(Alpha),3);
 
 %% Trajectory generation
 
-T = .25;
+T = .5;
 u_t = 0.:ts:T;
 
 % Constant Input
@@ -32,10 +32,11 @@ for m_idx=1:length(M)
         L = length(0:ts:T);
         z_norm = norm(z);
 
-        g_p = zeros(size(B,1),L);
+        g_p = zeros(size(A,2),L);
         [g_p(:,1),~] = Spline_Radial_Obs(z(:,1),X0);
         for i=1:L-1
-            g_p(:,i+1) = A*g_p(:,i) + B*u(:,i);
+            g_p(1:2,i+1) = A*g_p(:,i) + B*u(:,i);
+            g_p(:,i+1) = Spline_Radial_Obs(g_p(1:2,i+1),X0);
         end
         z_p = C*g_p;
         error_norm = norm(z_p-z);
@@ -55,10 +56,11 @@ for m_idx=1:length(M)
             L = length(0:ts:T);
             z_norm = norm(z);
 
-            g_p = zeros(size(B,1),L);
+            g_p = zeros(size(A,2),L);
             [g_p(:,1),~] = Spline_Radial_Obs(z(:,1),X0);
             for i=1:L-1
-                g_p(:,i+1) = A*g_p(:,i) + B*u(:,i);
+                g_p(1:2,i+1) = A*g_p(:,i) + B*u(:,i);
+                g_p(:,i+1) = Spline_Radial_Obs(g_p(1:2,i+1),X0);
             end
             z_p = C*g_p;
             error_norm = norm(z_p-z);
@@ -82,10 +84,11 @@ for m_idx=1:length(M)
         L = length(0:ts:T);
         z_norm = norm(z);
 
-        g_p = zeros(size(B,1),L);
+        g_p = zeros(size(A,2),L);
         [g_p(:,1),~] = Spline_Radial_Obs(z(:,1),X0);
         for i=1:L-1
-            g_p(:,i+1) = A*g_p(:,i) + B*u(:,i);
+            g_p(1:2,i+1) = A*g_p(:,i) + B*u(:,i);
+            g_p(:,i+1) = Spline_Radial_Obs(g_p(1:2,i+1),X0);
         end
         z_p = C*g_p;
         error_norm = norm(z_p-z);
@@ -105,10 +108,11 @@ for m_idx=1:length(M)
             L = length(0:ts:T);
             z_norm = norm(z);
 
-            g_p = zeros(size(B,1),L);
+            g_p = zeros(size(A,2),L);
             [g_p(:,1),~] = Spline_Radial_Obs(z(:,1),X0);
             for i=1:L-1
-                g_p(:,i+1) = A*g_p(:,i) + B*u(:,i);
+                g_p(1:2,i+1) = A*g_p(:,i) + B*u(:,i);
+                g_p(:,i+1) = Spline_Radial_Obs(g_p(1:2,i+1),X0);
             end
             z_p = C*g_p;
             error_norm = norm(z_p-z);
@@ -132,10 +136,11 @@ for m_idx=1:length(M)
         L = length(0:ts:T);
         z_norm = norm(z);
 
-        g_p = zeros(size(B,1),L);
+        g_p = zeros(size(A,2),L);
         [g_p(:,1),~] = Spline_Radial_Obs(z(:,1),X0);
         for i=1:L-1
-            g_p(:,i+1) = A*g_p(:,i) + B*u(:,i);
+            g_p(1:2,i+1) = A*g_p(:,i) + B*u(:,i);
+            g_p(:,i+1) = Spline_Radial_Obs(g_p(1:2,i+1),X0);
         end
         z_p = C*g_p;
         error_norm = norm(z_p-z);
@@ -155,10 +160,11 @@ for m_idx=1:length(M)
             L = length(0:ts:T);
             z_norm = norm(z);
 
-            g_p = zeros(size(B,1),L);
+            g_p = zeros(size(A,2),L);
             [g_p(:,1),~] = Spline_Radial_Obs(z(:,1),X0);
             for i=1:L-1
-                g_p(:,i+1) = A*g_p(:,i) + B*u(:,i);
+                g_p(1:2,i+1) = A*g_p(:,i) + B*u(:,i);
+                g_p(:,i+1) = Spline_Radial_Obs(g_p(1:2,i+1),X0);
             end
             z_p = C*g_p;
             error_norm = norm(z_p-z);

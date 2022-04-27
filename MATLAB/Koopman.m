@@ -1,36 +1,17 @@
-function [A,B] = Koopman(X,Y,U,alpha)
+function [A,B] = Koopman(X,Y,U,alpha,nx)
     % Following "Practical Considerations" from Korda-Mezić + Williams
     K = size(X,2);
 
     G = [X/K;U/K]*[X;U]';
-    V = (Y/K)*[X;U]';
+    V = (Y(1:nx,:)/K)*[X;U]';
     
-    A = zeros(size(Y,1),size(X,1));
-    B = zeros(size(Y,1),size(U,1));
+    A = zeros(nx,size(X,1));
+    B = zeros(nx,size(U,1));
 
-%     Matricial division segmented because of memory limits
-%     M0 = V/G;
-%     A = M0(:,1:size(X,1));
-%     B = M0(:,size(X,1)+1:end);
-    
-%     options = optimoptions(@fminunc, ...
-%                         'Display', 'none', ...
-%                         'UseParallel', true);
-    for i=1:size(Y,1)
+    for i=1:nx
         m0 = V(i,:)/G;
-
-%         m = lsqr([X;U]',Y(i,:)',[],[],[],[],m0')';
         
         if alpha>0.0
-%             fun = @(m) sum((Y(i,:)-m*[X;U]).^2) ...
-%                     + alpha*sum(m.^2);
-%         
-%             m = fminunc(fun,m0,options);
-
-%             C = [[X;U] sqrt(alpha)*m0'];
-%             d = [Y(i,:) 0];
-%             m = cplexlsqlin(C',d',[],[],[],[],[],[],m0')';
-
             cvx_begin
                 variable m(size(m0))
                 minimize (norm((m*[X;U]-Y(i,:))/K) + alpha*norm(m)/K)
