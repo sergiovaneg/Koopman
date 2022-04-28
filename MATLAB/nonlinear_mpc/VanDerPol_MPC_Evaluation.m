@@ -9,10 +9,10 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 %% Operators' retrieval
 
 % Load nlMPC
-load(data_source+"vdp_mpc_balanced.mat");
+load(data_source+"vdp_mpc_definitive.mat");
 
 % load Koopman
-load(data_source+'koopman_first_differential_M_26.mat');
+load(data_source+'koopman_definitive_hybrid_M_40.mat');
 
 %% Set simulation parameters
 
