@@ -21,11 +21,11 @@ nu = 1;
 nlobj = nlmpc(nx,ny,nu);
 
 nlobj.Ts = Ts;
-nlobj.PredictionHorizon = 10;
-nlobj.ControlHorizon = 2;
+nlobj.PredictionHorizon = 25;
+nlobj.ControlHorizon = 5;
 
-% nlobj.ManipulatedVariables.Max = 5.;
-% nlobj.ManipulatedVariables.Min = -5.;
+nlobj.ManipulatedVariables.Max = 1.;
+nlobj.ManipulatedVariables.Min = -1.;
 
 nlobj.OutputVariables(2).Max = 2;
 nlobj.OutputVariables(2).Min = -2;
@@ -44,7 +44,7 @@ createParameterBus(nlobj, ...
 
 data_source = "~/Documents/Thesis/VanDerPol_Clean_Unsteady_Input/";
 data_files = dir(data_source + "*.mat");
-load(data_source+data_files(68).name,"z");
+load(data_source+data_files(69).name,"z");
 Z = z(:,2:end);
 R1 = array2timetable(Z(1,:)',"TimeStep",seconds(Ts));
 R2 = array2timetable(Z(2,:)',"TimeStep",seconds(Ts));
