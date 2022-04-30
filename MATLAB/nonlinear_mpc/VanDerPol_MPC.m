@@ -8,6 +8,7 @@ clc;
 
 Ts = 1e-2;
 Tf = 2e3;
+eta = 0.001;
 
 nx = 2;
 ny = 2;
@@ -34,7 +35,7 @@ nlobj.Weights.OutputVariables = [1. .0];
 % validateFcns(nlobj,x0,u0,[],{Ts});
 
 createParameterBus(nlobj, ...
-    ['Simulink_VDP_nonlinear' '/vdpMPC'], ...
+    ['Simulink_VDP_KalmanMPC' '/vdpMPC'], ...
     'Ts_Bus',{Ts});
 
 save("~/Documents/Thesis/Nonlinear_MPC_VDP/vdp_mpc_definitive","nlobj","Ts");
