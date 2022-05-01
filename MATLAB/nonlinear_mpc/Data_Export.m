@@ -11,4 +11,5 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 
 Z = out.Z';
 U = [out.U_ref';out.U_vdp'];
-save(data_source + "data_kalman_definitive.mat","U","Z","Ts");
+U_hat = out.U_hat';
+save(data_source + "data_kalman_definitive.mat","U","Z","Ts","U_hat");

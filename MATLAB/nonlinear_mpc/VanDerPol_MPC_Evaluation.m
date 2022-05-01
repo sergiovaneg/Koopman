@@ -11,8 +11,14 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 % Load nlMPC
 load(data_source+"vdp_mpc_definitive.mat");
 
+% load Kalman
+load(data_source+"kalman_M_50.mat");
+A_kalman = A;
+B_kalman = B;
+X0_kalman = X0;
+
 % load Koopman
-load(data_source+'koopman_kalman_M_25.mat');
+load(data_source+'koopman_hybrid_M_25.mat');
 
 %% Set simulation parameters
 
@@ -30,3 +36,4 @@ createParameterBus(nlobj, ...
 
 y_0 = 0;
 ss_0 = Spline_Radial_Obs(y_0,X0);
+kalman_0 = Spline_Radial_Obs([0;0],X0_kalman);
