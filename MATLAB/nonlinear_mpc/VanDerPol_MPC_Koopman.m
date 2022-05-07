@@ -4,7 +4,7 @@ close all;
 clearvars;
 clc;
 addpath("~/Koopman/MATLAB/");
-rng(0,'threefry');
+rng(0,"threefry");
 data_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 
 %% First step - System observation
@@ -12,10 +12,14 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 load(data_source + "data_kalman_definitive.mat");
 L = 2e5;
 
-M = 50;
+M = 15;
 n_u = size(U,1);
+X0 = zeros(2,M);
+for i=1:size(X0,1)
+    X0(i,:) = random('Normal',mean(X(i,:)),std(X(i,:)),1,M);
+end
 
-% Full-State
+% Full-state
 % X0 = 2*rand(size(Z,1),M)-1;
 % [G,~] = Spline_Radial_Obs(Z,X0);
 % Px = G(:,1:L);
@@ -23,7 +27,7 @@ n_u = size(U,1);
 % U = [U(:,1:L);
 %     U(1:n_u/2,1:L) - U(n_u/2+1:end,1:L)];
 
-% Full-State + Delay
+% Full-state + Delay
 % X0 = 2*rand(size(Z,1),M)-1;
 % [G,~] = Spline_Radial_Obs(Z,X0);
 % Px = [G(:,3:L);G(:,2:L-1);G(:,1:L-2)];
@@ -31,29 +35,13 @@ n_u = size(U,1);
 % U = [U(:,3:L);
 %     U(1:n_u/2,3:L) - U(n_u/2+1:end,3:L)];
 
-% Kalman
-% X0 = 2*rand(size(Z,1),M)-1;
-% [G,~] = Spline_Radial_Obs(Z,X0);
+% Kalman subsystem
+% X0 = 2*rand(size(U_hat,1),M)-1;
+% [G,~] = Spline_Radial_Obs(U_hat,X0);
 % Px = G(:,1:L);
 % Py = G(:,2:L+1);
-% U = [U(:,1:L);
-%     U(1,1:L) - U(3,1:L)];
-
-% Kalman + Delay
-% X0 = 2*rand(size(Z,1),M)-1;
-% [G,~] = Spline_Radial_Obs(Z,X0);
-% Px = [G(:,2:L);G(:,1:L-1)];
-% Py = G(:,3:L+1);
-% U = [U(:,2:L);
-%     U(1,2:L) - U(3,2:L)];
-
-% Kalman subsystem + Delay
-X0 = 2*rand(size(U_hat,1),M)-1;
-[G,~] = Spline_Radial_Obs(U_hat,X0);
-Px = G(:,1:L);
-Py = G(:,2:L+1);
-U = [U(3,1:L);
-    Z(:,1:L)];
+% U = [U(3,1:L);
+%     Z(:,1:L)];
 
 % Kalman subsystem + Delay
 % X0 = 2*rand(size(U_hat,1),M)-1;
@@ -63,27 +51,54 @@ U = [U(3,1:L);
 % U = [U(3,2:L);
 %     Z(:,2:L)];
 
+% Kalman-koopman (No delay)
+% [G,~] = Spline_Radial_Obs(X,X0);
+% Px = G(:,1:L);
+% Py = G(:,2:L+1);
+% U = U(:,1:L);
+
+% Kalman-koopman + State-Delay
+% [G,~] = Spline_Radial_Obs(X,X0);
+% Px = [G(:,3:L);G(:,2:L-1);G(:,1:L-2)];
+% Py = G(:,4:L+1);
+% U = U(:,3:L);
+
+% Kalman-koopman + Input-Delay
+% [G,~] = Spline_Radial_Obs(X,X0);
+% Px = G(:,3:L);
+% Py = G(:,4:L+1);
+% U = [U(:,3:L);U(:,2:L-1);U(:,1:L-2)];
+
+% % Kalman-koopman + State-Delay + Input-Delay
+[G,~] = Spline_Radial_Obs(X(1:2,:),X0);
+Px = [G(:,3:L);G(:,2:L-1);G(:,1:L-2)];
+Py = G(:,4:L+1);
+U = [U(:,3:L);U(:,2:L-1);U(:,1:L-2)];
+
 %% Second step - Operator calculation
 
 tic
 
-alpha = 1e-3;
+alpha = 5e-3;
 [A,B] = Koopman(Px,Py,U,alpha,2);
 
 % Original states recovered by convention
 % (the first n observers are the original states)
-C = zeros(size(Z,1),size(A,2));
-C(1:size(Z,1),1:size(Z,1)) = eye(size(Z,1));
+% C = zeros(size(Z,1),size(A,2));
+% C(1:size(Z,1),1:size(Z,1)) = eye(size(Z,1));
+
+% Recover control signal
+[C,D] = Koopman(Px,X(3,3:L),U,alpha,1);
 
 % Recovery of original states independent from input
-D = zeros(size(Z,1),size(U,1));
+% D = zeros(size(Z,1),size(U,1));
 
-save(sprintf(data_source+'kalman_M_%i.mat',M), ...
+save(sprintf(data_source+'kalman_koopman_dd_M_%i.mat',M), ...
     "A","B","C","D","Ts","X0");
 
 toc
 
-Lambda = eig(A(:,1:size(U_hat,1)));
+Lambda = eig(A(:,1:size(A,1)));
 figure(1);
 scatter(real(Lambda),imag(Lambda));
 hold on;
