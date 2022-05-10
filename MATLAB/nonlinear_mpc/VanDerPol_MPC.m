@@ -7,7 +7,7 @@ clc;
 %% Parameters
 
 Ts = 1e-2;
-Tf = 2e3;
+Tf = 5e3;
 eta = 0.001;
 
 nx = 2;
@@ -16,13 +16,13 @@ nu = 1;
 nlobj = nlmpc(nx,ny,nu);
 
 nlobj.Ts = Ts;
-nlobj.PredictionHorizon = 15;
-nlobj.ControlHorizon = 3;
+nlobj.PredictionHorizon = 25;
+nlobj.ControlHorizon = 5;
 
-% nlobj.MV.Max = 5;
-% nlobj.MV.Min = -5;
-nlobj.OV(2).Max = 3.;
-nlobj.OV(2).Min = -3.;
+nlobj.MV.Max = 1;
+nlobj.MV.Min = -1;
+nlobj.OV(2).Max = 2;
+nlobj.OV(2).Min = -2;
 
 nlobj.Model.StateFcn = "vdp_DT0";
 nlobj.Model.IsContinuousTime = false;
@@ -35,7 +35,7 @@ nlobj.Weights.OutputVariables = [1. .0];
 % validateFcns(nlobj,x0,u0,[],{Ts});
 
 save("~/Documents/Thesis/Nonlinear_MPC_VDP/vdp_mpc_definitive","nlobj","Ts");
-
+    
 createParameterBus(nlobj, ...
     ['Simulink_VDP_KalmanMPC' '/vdpMPC'], ...
     'Ts_Bus',{Ts});

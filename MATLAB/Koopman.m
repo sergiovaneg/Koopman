@@ -13,8 +13,8 @@ function [A,B] = Koopman(X,Y,U,alpha,nx)
         
         if alpha>0.0
             cvx_begin
-                variable m(size(m0))
-                minimize (norm((m*[X;U]-Y(i,:))/K) + alpha*norm(m)/K)
+                variable m(1,size(X,1)+size(U,1))
+                minimize (norm((m*[X;U]-Y(i,:)))/K + alpha*norm(m))
             cvx_end
         elseif alpha==0.0
             m = m0;
