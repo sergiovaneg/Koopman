@@ -2,8 +2,8 @@ function [A,B] = Koopman(X,Y,U,alpha,nx)
     % Following "Practical Considerations" from Korda-Mezić + Williams
     K = size(X,2);
 
-    G = [X/K;U/K]*[X;U]';
-    V = (Y(1:nx,:)/K)*[X;U]';
+    G = [X;U]*[X;U]'/K;
+    V = Y(1:nx,:)*[X;U]'/K;
     
     A = zeros(nx,size(X,1));
     B = zeros(nx,size(U,1));
