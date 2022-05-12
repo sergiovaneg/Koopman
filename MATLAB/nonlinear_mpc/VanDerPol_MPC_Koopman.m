@@ -9,10 +9,10 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 %% First step - System observation
 
 load(data_source + "data_kalman_definitive.mat");
-L = 1e5;
+L = size(Y,2)-1;
 n_u = size(U,1);
-X = out.X';
-M = 30;
+% X = [X;Y];
+M = 100;
 X0 = zeros(size(X,1),M);
 for i=1:size(X0,1)
     X0(i,:) = random('Normal',mean(X(i,:)),std(X(i,:)),1,M);
@@ -47,17 +47,16 @@ U = [U(:,2:L+1);Y(:,1:L)];
 
 tic
 
-alpha = 1e-5;
+alpha = 1e-7;
 [A,B] = Koopman(G1,G2,U,alpha,size(X,1));
 
-% Recover control signal
+% Recover control signal (Control as output)
 [C,D] = Koopman(G2,Y(:,2:L+1),U,alpha,size(Y,1));
+
+% Recover control signal (Control as state)
 % C = zeros(size(Y,1),size(G1,1));
 % C(3) = 1;
 % D = zeros(size(Y,1),size(U,1));
-
-% Recovery of original states independent from input
-% D = zeros(size(Z,1),size(U,1));
 
 save(sprintf(data_source+'kalman_koopman_nd_M_%i.mat',M), ...
     "A","B","C","D","Ts","X0","n_u");

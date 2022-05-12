@@ -1,6 +1,6 @@
 function [exponents,i] = Recursive_Monomial(i,j,exponents,current,P)
     while sum(current) <= P
-        if j==size(exponents,2)
+        if j==size(exponents,2) && sum(current)>0
             exponents(i,:) = current;
             i = i+1;
         else
