@@ -12,7 +12,7 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 load(data_source+"vdp_mpc_definitive.mat");
 
 % load Koopman
-load(data_source+'kk_asState_M_50.mat');
+load(data_source+'kk_asState_M_100.mat');
 
 %% Set simulation parameters
 
@@ -25,7 +25,7 @@ R1 = array2timetable(z(1,:)',"TimeStep",seconds(Ts));
 R2 = array2timetable(z(2,:)',"TimeStep",seconds(Ts));
 
 createParameterBus(nlobj, ...
-    ['Simulink_VDP_KK' '/vdpMPC'], ...
+    ['Simulink_VDP_KK_State' '/vdpMPC'], ...
     'Ts_Bus',{Ts});
 
 x_0 = zeros(size(X0,1),1);
