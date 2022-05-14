@@ -16,7 +16,7 @@ load(data_source+'kk_asState_M_100.mat');
 
 %% Set simulation parameters
 
-Tf = 20;
+Tf = 10;
 eta = 0.001;
 
 load(sprintf( ...
@@ -25,7 +25,7 @@ R1 = array2timetable(z(1,:)',"TimeStep",seconds(Ts));
 R2 = array2timetable(z(2,:)',"TimeStep",seconds(Ts));
 
 createParameterBus(nlobj, ...
-    ['Simulink_VDP_KK_State' '/vdpMPC'], ...
+    ['Simulink_VDP_KalmanMPC' '/vdpMPC'], ...
     'Ts_Bus',{Ts});
 
 x_0 = zeros(size(X0,1),1);
