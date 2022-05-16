@@ -3,13 +3,14 @@ function [A,B] = Koopman(X,Y,U,alpha,nx)
     K = size(X,2);
 
     G = [X;U]*[X;U]'/K;
+    G_pinv = pinv(G);
     V = Y(1:nx,:)*[X;U]'/K;
     
     A = zeros(nx,size(X,1));
     B = zeros(nx,size(U,1));
 
     for i=1:nx
-        m0 = V(i,:)/G;
+        m0 = V(i,:)*G_pinv;
         
         if alpha>0.0
             cvx_begin

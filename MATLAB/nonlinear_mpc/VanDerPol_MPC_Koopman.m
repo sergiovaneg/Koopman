@@ -13,7 +13,7 @@ load(data_source + "data_kalman_definitive.mat");
 L = size(Y,2)-1;
 n_u = size(U,1);
 X = [X;Y];
-M = 100;
+M = 60;
 X0 = zeros(size(X,1),M);
 for i=1:size(X0,1)
     X0(i,:) = random('Normal',mean(X(i,:)),std(X(i,:)),1,M);
@@ -30,7 +30,7 @@ U = U(:,2:L+1); % For control as state
 
 tic
 
-alpha = 5e-4;
+alpha = 0;
 [A,B] = Koopman(G1,G2,U,alpha,size(X,1));
 
 % Recover control signal (Control as output)

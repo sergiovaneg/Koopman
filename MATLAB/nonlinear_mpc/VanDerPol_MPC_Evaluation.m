@@ -12,11 +12,11 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 load(data_source+"vdp_mpc_definitive.mat");
 
 % load Koopman
-load(data_source+'kk_asState_M_100.mat');
+load(data_source+'kk_asOutput_M_100.mat');
 
 %% Set simulation parameters
 
-Tf = 10;
+Tf = 100;
 eta = 0.001;
 
 load(sprintf( ...
