@@ -14,6 +14,22 @@ load(data_source+"vdp_mpc_definitive.mat");
 % load Koopman
 load(data_source+'kk_asOutput_M_100.mat');
 
+% figure(1);
+% Lambda = eig(A);
+% scatter(real(Lambda),imag(Lambda),Marker="x");
+% hold on;
+% load(data_source+'kk_asState_M_100.mat');
+% Lambda = eig(A);
+% scatter(real(Lambda),imag(Lambda),Marker="x");
+% legend("Control as Output","Control as State");
+% xlabel("Real"); ylabel("Imaginary");
+% xlim([-.15 1]); ylim([-0.35 0.35]);
+% rectangle('Position', [-1 -1 2 2], 'Curvature', 1);
+% hold off;
+
+A = A(1:n_x,:);
+B = B(1:n_x,:);
+
 %% Set simulation parameters
 
 Tf = 100;
