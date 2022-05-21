@@ -12,6 +12,7 @@ t_id = 0:Ts:(size(U,2)-1)*Ts;
 
 load(data_source + "scope_data.mat");
 t = 0:Ts:(size(r_osc,2)-1)*Ts;
+t_stability = 0:Ts:(size(stability_osc,2)-1)*Ts;
 
 %% Identification set
 
@@ -164,3 +165,70 @@ legend("MPC","Koopman - As output", "Koopman - As state","Reference", ...
     Location="southeast");
 xlabel("t [s]");
 title("Second state");
+
+%% Stability verification
+
+figure(5);
+
+subplot(3,2,1);
+plot(t_stability,st_x_pulse(1,:));
+hold on;
+plot(t_stability,unst_x_pulse(1,:));
+plot(t_stability,stability_pulse(1,:));
+hold off;
+legend("Stable", "Unstable","Reference");
+xlim([0 20]);
+xlabel("t [s]");
+title("First state - Pulse");
+
+subplot(3,2,2);
+plot(t_stability,st_w_pulse);
+hold on;
+plot(t_stability,unst_w_pulse);
+hold off;
+legend("Stable", "Unstable");
+xlim([0 20]); ylim([-2,2]);
+xlabel("t [s]");
+title("Control signal - Pulse");
+
+subplot(3,2,3);
+plot(t_stability,st_x_step(1,:));
+hold on;
+plot(t_stability,unst_x_step(1,:));
+plot(t_stability,stability_step(1,:));
+hold off;
+legend("Stable", "Unstable","Reference",Location="southeast");
+xlim([0 20]);
+xlabel("t [s]");
+title("First state - Step");
+
+subplot(3,2,4);
+plot(t_stability,st_w_step);
+hold on;
+plot(t_stability,unst_w_step);
+hold off;
+legend("Stable", "Unstable");
+xlim([0 20]); ylim([-2,2]);
+xlabel("t [s]");
+title("Control signal - Step");
+
+subplot(3,2,5);
+plot(t_stability,st_x_osc(1,:));
+hold on;
+plot(t_stability,unst_x_osc(1,:));
+plot(t_stability,stability_osc(1,:));
+hold off;
+legend("Stable", "Unstable","Reference");
+xlim([0 20]);
+xlabel("t [s]");
+title("First state - Oscillating");
+
+subplot(3,2,6);
+plot(t_stability,st_w_osc);
+hold on;
+plot(t_stability,unst_w_osc);
+hold off;
+legend("Stable", "Unstable");
+xlim([0 20]); ylim([-2,2]);
+xlabel("t [s]");
+title("Control signal - Oscillating");

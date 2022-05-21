@@ -19,7 +19,7 @@ end
 n_x = size(X,1);
 n_u = size(U,1);
 
-M = 20;
+M = 100;
 X0 = zeros(size(X,1),M);
 for i=1:size(X0,1)
     X0(i,:) = random('Normal',mean(X(i,:)),std(X(i,:)),1,M);
@@ -39,7 +39,7 @@ end
 
 tic
 
-alpha = 0;
+alpha = 7e-3;
 [A,B] = Koopman(G1,G2,U,alpha,size(G2,1));
 if strcmp(type,"asOutput")
     [C,D] = Koopman(G2,Y(:,2:L+1),U,alpha,size(Y,1));
@@ -49,7 +49,7 @@ else
     D = zeros(size(Y,1),size(U,1));
 end
 
-save(sprintf(data_source+'kk_%s_M_%i.mat',type,M), ...
+save(sprintf(data_source+'kk_%s_M_%i_unstable.mat',type,M), ...
     "A","B","C","D","Ts","X0","n_x","n_u");
 
 toc

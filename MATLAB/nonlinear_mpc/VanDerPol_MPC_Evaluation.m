@@ -12,18 +12,18 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 load(data_source+"vdp_mpc_definitive.mat");
 
 % load Koopman
-load(data_source+'kk_asOutput_M_100.mat');
+load(data_source+'kk_asState_stable.mat');
 
 % figure(1);
 % Lambda = eig(A);
 % scatter(real(Lambda),imag(Lambda),Marker="x");
 % hold on;
-% load(data_source+'kk_asState_M_100.mat');
+% load(data_source+'kk_asState_unstable.mat');
 % Lambda = eig(A);
 % scatter(real(Lambda),imag(Lambda),Marker="x");
-% legend("Control as Output","Control as State");
+% legend("Control as State (Stable)","Control as State (Unstable)");
 % xlabel("Real"); ylabel("Imaginary");
-% xlim([-.15 1]); ylim([-0.35 0.35]);
+% xlim([-.4 1.2]); ylim([-.4 .4]);
 % rectangle('Position', [-1 -1 2 2], 'Curvature', 1);
 % hold off;
 
