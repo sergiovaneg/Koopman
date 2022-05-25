@@ -12,8 +12,9 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 load(data_source+"vdp_mpc_definitive.mat");
 
 % load Koopman
-load(data_source+'kk_asState_stable.mat');
+load(data_source+'kk_asOutput_M_100.mat');
 
+% load(data_source+'kk_asState_stable.mat');
 % figure(1);
 % Lambda = eig(A);
 % scatter(real(Lambda),imag(Lambda),Marker="x");

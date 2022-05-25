@@ -47,15 +47,15 @@ ylim([-1.2,1.2]);
 xlabel("t [s]");
 title("Second state");
 
-%% Pulse reference
+%% Negative reference
 
 figure(2);
 
 subplot(3,1,1);
-plot(t,MPC_w_pulse);
+plot(t,MPC_w_neg);
 hold on;
-plot(t,asOutput_w_pulse);
-plot(t,asState_w_pulse);
+plot(t,asOutput_w_neg);
+plot(t,asState_w_neg);
 hold off;
 legend("MPC","Koopman - As output", "Koopman - As state");
 ylim([-2,2]);
@@ -63,26 +63,26 @@ xlabel("t [s]");
 title("Control signal");
 
 subplot(3,1,2);
-plot(t,MPC_x_pulse(1,:));
+plot(t,MPC_x_neg(1,:));
 hold on;
-plot(t,asOutput_x_pulse(1,:));
-plot(t,asState_x_pulse(1,:));
-plot(t,r_pulse(1,:));
+plot(t,asOutput_x_neg(1,:));
+plot(t,asState_x_neg(1,:));
+plot(t,r_neg(1,:));
 hold off;
 legend("MPC","Koopman - As output", "Koopman - As state","Reference");
-ylim([-.2,1]);
+ylim([-1,.2]);
 xlabel("t [s]");
 title("First state");
 
 subplot(3,1,3);
-plot(t,MPC_x_pulse(2,:));
+plot(t,MPC_x_neg(2,:));
 hold on;
-plot(t,asOutput_x_pulse(2,:));
-plot(t,asState_x_pulse(2,:));
-plot(t,r_pulse(2,:));
+plot(t,asOutput_x_neg(2,:));
+plot(t,asState_x_neg(2,:));
+plot(t,r_neg(2,:));
 hold off;
-ylim([-.2,1]);
 legend("MPC","Koopman - As output", "Koopman - As state","Reference");
+ylim([-1,.2]);
 xlabel("t [s]");
 title("Second state");
 
@@ -170,28 +170,7 @@ title("Second state");
 
 figure(5);
 
-subplot(3,2,1);
-plot(t_stability,st_x_pulse(1,:));
-hold on;
-plot(t_stability,unst_x_pulse(1,:));
-plot(t_stability,stability_pulse(1,:));
-hold off;
-legend("Stable", "Unstable","Reference");
-xlim([0 20]);
-xlabel("t [s]");
-title("First state - Pulse");
-
-subplot(3,2,2);
-plot(t_stability,st_w_pulse);
-hold on;
-plot(t_stability,unst_w_pulse);
-hold off;
-legend("Stable", "Unstable");
-xlim([0 20]); ylim([-2,2]);
-xlabel("t [s]");
-title("Control signal - Pulse");
-
-subplot(3,2,3);
+subplot(2,1,1);
 plot(t_stability,st_x_step(1,:));
 hold on;
 plot(t_stability,unst_x_step(1,:));
@@ -202,7 +181,7 @@ xlim([0 20]);
 xlabel("t [s]");
 title("First state - Step");
 
-subplot(3,2,4);
+subplot(2,1,2);
 plot(t_stability,st_w_step);
 hold on;
 plot(t_stability,unst_w_step);
@@ -211,24 +190,3 @@ legend("Stable", "Unstable");
 xlim([0 20]); ylim([-2,2]);
 xlabel("t [s]");
 title("Control signal - Step");
-
-subplot(3,2,5);
-plot(t_stability,st_x_osc(1,:));
-hold on;
-plot(t_stability,unst_x_osc(1,:));
-plot(t_stability,stability_osc(1,:));
-hold off;
-legend("Stable", "Unstable","Reference");
-xlim([0 20]);
-xlabel("t [s]");
-title("First state - Oscillating");
-
-subplot(3,2,6);
-plot(t_stability,st_w_osc);
-hold on;
-plot(t_stability,unst_w_osc);
-hold off;
-legend("Stable", "Unstable");
-xlim([0 20]); ylim([-2,2]);
-xlabel("t [s]");
-title("Control signal - Oscillating");
