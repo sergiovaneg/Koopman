@@ -12,7 +12,7 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 load(data_source+"vdp_mpc_definitive.mat");
 
 % load Koopman
-load(data_source+'kk_asOutput_M_100.mat');
+load(data_source+'kk_asState_M_50.mat');
 
 % load(data_source+'kk_asState_stable.mat');
 % figure(1);
