@@ -8,9 +8,9 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_DUFF/";
 
 %% Parameter selection
 
-cov_is_state = true;
+cov_is_state = false;
 obs_type = "polynomial";
-M = 3; % M->P in the case of polynomial bases
+n_g = 19; % M->P in the case of polynomial bases
 
 %% Operators' retrieval
 
@@ -20,15 +20,15 @@ load(data_source+"duff_mpc_definitive.mat");
 % load Koopman
 if cov_is_state
     if strcmp(obs_type,"radial")
-        load(sprintf(data_source+'kk_cov_radial_M_%i.mat',M));
+        load(sprintf(data_source+'kk_cov_radial_ng_%i.mat',n_g));
     elseif strcmp(obs_type,"polynomial")
-        load(sprintf(data_source+'kk_cov_polynomial_P_%i.mat',M));
+        load(sprintf(data_source+'kk_cov_polynomial_P_%i.mat',n_g));
     end
 else
     if strcmp(obs_type,"radial")
-        load(sprintf(data_source+'kk_radial_M_%i.mat',M));
+        load(sprintf(data_source+'kk_radial_ng_%i.mat',n_g));
     elseif strcmp(obs_type,"polynomial")
-        load(sprintf(data_source+'kk_polynomial_P_%i.mat',M));
+        load(sprintf(data_source+'kk_polynomial_P_%i.mat',n_g));
     end
 end
 
@@ -50,19 +50,19 @@ createParameterBus(nlobj, ...
 
 if cov_is_state
     x_0 = zeros(n_x,1);
-    x_0(3) = 0;
-    x_0(5) = 0;
+    x_0(3) = eta;
+    x_0(5) = eta;
     if strcmp(obs_type,"radial") 
         ss_0 = Spline_Radial_Obs(x_0,X0);
     elseif strcmp(obs_type,"polynomial")
-        [ss_0,~,expts] = Poly_Obs(x_0,M);
+        [ss_0,~,expts] = Poly_Obs(x_0,n_g);
     end
 else
     x_0 = zeros(n_x,1);
     if strcmp(obs_type,"radial") 
         ss_0 = Spline_Radial_Obs(x_0,X0);
     elseif strcmp(obs_type,"polynomial") 
-        [ss_0,~,expts] = Poly_Obs(x_0,M);
+        [ss_0,~,expts] = Poly_Obs(x_0,n_g);
     end
 end
 u_0 = zeros(n_w,1);

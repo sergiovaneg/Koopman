@@ -45,13 +45,13 @@ idx = 1;
 
 for i=1:length(refs)
     Z(1,idx:idx+step_length/Ts-1) = refs(i);
-    Z(2,idx) = (refs(i)-last)/(2*Ts);
+    Z(2,idx) = (refs(i)-last)/Ts;
     idx = idx+step_length/Ts;
     last = refs(i);
 end
 for i=length(refs):-1:1
     Z(1,idx:idx+step_length/Ts-1) = refs(i);
-    Z(2,idx) = (refs(i)-last)/(2*Ts);
+    Z(2,idx) = (refs(i)-last)/Ts;
     idx = idx+step_length/Ts;
     last = refs(i);
 end
@@ -59,7 +59,7 @@ end
 ref_order = randperm(length(refs));
 for i=1:length(refs)
     Z(1,idx:idx+step_length/Ts-1) = refs(ref_order(i));
-    Z(2,idx) = (refs(ref_order(i))-last)/(2*Ts);
+    Z(2,idx) = (refs(ref_order(i))-last)/Ts;
     idx = idx+step_length/Ts;
     last = refs(ref_order(i));
 end
