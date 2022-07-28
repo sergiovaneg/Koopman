@@ -10,7 +10,8 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_DUFF/";
 
 cov_is_state = false;
 obs_type = "polynomial";
-n_g = 19; % M->P in the case of polynomial bases
+n_g = 5; % M->P in the case of polynomial bases
+mf = matfile(data_source+"scope_data.mat","Writable",true);
 
 %% Operators' retrieval
 

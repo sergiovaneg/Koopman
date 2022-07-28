@@ -8,27 +8,29 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_DUFF/";
 %% Data retrieval
 
 load(data_source+"data_duffing_definitive.mat");
-t_id = 0:Ts:(size(U,2)-1)*Ts;
+t_id = 0:Ts:(size(W,2)-1)*Ts;
 
 load(data_source + "scope_data.mat");
 t = 0:Ts:(size(r_osc,2)-1)*Ts;
+
+t_limit = 10;
 
 %% Identification set
 
 figure(1);
 
 subplot(3,1,1);
-plot(t_id, Y);
+plot(t_id, W);
 xlim([0,t_id(end)]);
-ylim([-2,2]);
+ylim([-5,5]);
 xlabel("t [s]");
 title("Control signal - MPC");
 
 subplot(3,1,2);
 plot(t_id,X(1,:),LineWidth=1.5);
 hold on;
-plot(t_id,U(3,:))
-plot(t_id,U(1,:));
+plot(t_id,Y)
+plot(t_id,R(1,:));
 hold off;
 legend("Kalman-estimated","Measured","Reference");
 xlim([0,t_id(end)]);
@@ -38,11 +40,11 @@ title("First state");
 subplot(3,1,3);
 plot(t_id,X(2,:));
 hold on;
-plot(t_id,U(2,:));
+plot(t_id,R(2,:));
 hold off;
 legend("Kalman-estimated","Reference");
 xlim([0,t_id(end)]);
-ylim([-1.2,1.2]);
+ylim([-1.1,1.1]);
 xlabel("t [s]");
 title("Second state");
 
@@ -61,7 +63,8 @@ legend("MPC", ...
         "Koopman - Spline-radial", ...
         "Koopman - Spline-radial + Kalman covariance", ...
         "Koopman - Polynomial");
-ylim([-2,2]);
+xlim([0 t_limit]);
+ylim([-5,5]);
 xlabel("t [s]");
 title("Control signal");
 
@@ -78,7 +81,8 @@ legend("MPC", ...
         "Koopman - Spline-radial + Kalman covariance", ...
         "Koopman - Polynomial", ...
         "Reference");
-ylim([-1,.2]);
+xlim([0 t_limit]);
+ylim([-1.1,.1]);
 xlabel("t [s]");
 title("First state");
 
@@ -94,8 +98,10 @@ legend("MPC", ...
         "Koopman - Spline-radial", ...
         "Koopman - Spline-radial + Kalman covariance", ...
         "Koopman - Polynomial", ...
-        "Reference");
-ylim([-1,.2]);
+        "Reference", ...
+        Location="southeast");
+xlim([0 t_limit]);
+ylim([-1.5,.3]);
 xlabel("t [s]");
 title("Second state");
 
@@ -114,7 +120,8 @@ legend("MPC", ...
         "Koopman - Spline-radial", ...
         "Koopman - Spline-radial + Kalman covariance", ...
         "Koopman - Polynomial");
-ylim([-2,2]);
+xlim([0 t_limit]);
+ylim([-5,5]);
 title("Control signal");
 
 subplot(3,1,2);
@@ -129,7 +136,9 @@ legend("MPC", ...
         "Koopman - Spline-radial", ...
         "Koopman - Spline-radial + Kalman covariance", ...
         "Koopman - Polynomial", ...
-        "Reference");
+        "Reference", ...
+        Location="southeast");
+xlim([0 t_limit]);
 ylim([0,1.2]);
 xlabel("t [s]");
 title("First state");
@@ -142,7 +151,8 @@ plot(t,radialcov_x_step(2,:));
 plot(t,poly_x_step(2,:));
 plot(t,r_step(2,:));
 hold off;
-ylim([-.2,1.2]);
+xlim([0 t_limit]);
+ylim([-.9,1.7]);
 legend("MPC", ...
         "Koopman - Spline-radial", ...
         "Koopman - Spline-radial + Kalman covariance", ...
@@ -165,8 +175,10 @@ hold off;
 legend("MPC", ...
         "Koopman - Spline-radial", ...
         "Koopman - Spline-radial + Kalman covariance", ...
-        "Koopman - Polynomial");
-ylim([-2,2]);
+        "Koopman - Polynomial", ...
+        Location="southeast");
+xlim([0 t_limit]);
+ylim([-5,5]);
 xlabel("t [s]");
 title("Control signal");
 
@@ -182,7 +194,9 @@ legend("MPC", ...
         "Koopman - Spline-radial", ...
         "Koopman - Spline-radial + Kalman covariance", ...
         "Koopman - Polynomial", ...
-        "Reference");
+        "Reference", ...
+        Location="southeast");
+xlim([0 t_limit]);
 xlabel("t [s]");
 title("First state");
 
@@ -194,11 +208,13 @@ plot(t,radialcov_x_osc(2,:));
 plot(t,poly_x_osc(2,:));
 plot(t,r_osc(2,:));
 hold off;
-ylim([-1.2,1.2]);
 legend("MPC", ...
         "Koopman - Spline-radial", ...
         "Koopman - Spline-radial + Kalman covariance", ...
         "Koopman - Polynomial", ...
-        "Reference");
+        "Reference", ...
+        Location="southeast");
+xlim([0 t_limit]);
+ylim([-1.5,1.5]);
 xlabel("t [s]");
 title("Second state");

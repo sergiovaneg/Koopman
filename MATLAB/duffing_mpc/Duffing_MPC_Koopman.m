@@ -11,7 +11,7 @@ data_source = "~/Documents/Thesis/Nonlinear_MPC_DUFF/";
 
 cov_is_state = false;
 obs_type = "polynomial";
-n_g = 19; % M->P in the case of polynomial bases
+n_g = 9; % M->P in the case of polynomial bases
 
 %% First step - System observation
 
@@ -46,7 +46,7 @@ U = [R(:,2:L+1);
 
 tic
 
-alpha = 1e-3;
+alpha = 1e-6;
 [A,B] = Koopman(G1,G2,U,alpha,size(G2,1));
 [C,D] = Koopman(G2,W(:,2:L+1),U,alpha,size(W,1));
 
