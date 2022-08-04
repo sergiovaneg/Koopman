@@ -3,17 +3,17 @@
 close all;
 clearvars;
 clc;
-Data_Source = "~/Documents/Thesis/VanDerPol_Clean_Unsteady_Input/";
+Data_Source = "~/Documents/Thesis/Linear_MPC/";
 
 %% Oscillator
 
 ts = 1e-2;
-T = 100;
-N_Sim = 10;
+T = 10;
+N_Sim = 100;
 
 u_t = 0:ts:T;
-sigma = .5; % 0 for constant input
-eta = 0.00; % 0 for no signal noise
+sigma = 1.; % 0 for constant input
+eta = 0.01; % 0 for no signal noise
 mu = 0;
 
 system("mkdir -p "+Data_Source);
