@@ -62,5 +62,5 @@ createParameterBus(nlobj, ...
 
 eta = 0.001;
 
-load(data_source+"Data_joint.mat");
+load(data_source+"data_joint.mat",'R1','R2');
 Tf = 1e3;
