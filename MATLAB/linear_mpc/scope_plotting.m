@@ -119,3 +119,26 @@ xlim([t_start t_start+t_limit]);
 ylim([-1.5,1.5]);
 xlabel("t [s]");
 title("First state");
+
+%% Identification set (zoomed in)
+
+figure(4);
+
+subplot(3,1,1);
+plot(t_id, U);
+xlim([0 t_limit]);
+ylim([-5,5]);
+xlabel("t [s]");
+title("Input Signal - VdP oscillator");
+
+subplot(3,1,2);
+plot(t_id,X(1,:));
+xlim([0 t_limit]);
+xlabel("t [s]");
+title("(Noisy) First state - VdP oscillator");
+
+subplot(3,1,3);
+plot(t_id,X(2,:));
+xlim([0 t_limit]);
+xlabel("t [s]");
+title("(Noisy) Second state - VdP oscillator");
