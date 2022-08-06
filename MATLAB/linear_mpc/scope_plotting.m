@@ -39,7 +39,7 @@ xlim([0,t_id(end)]);
 xlabel("t [s]");
 title("(Noisy) Second state - VdP oscillator");
 
-%% Negative reference
+%% Oscillating reference
 
 figure(2);
 
@@ -118,7 +118,7 @@ legend("Nonlinear MPC", ...
 xlim([t_start t_start+t_limit]);
 ylim([-1.5,1.5]);
 xlabel("t [s]");
-title("First state");
+title("Second state");
 
 %% Identification set (zoomed in)
 
