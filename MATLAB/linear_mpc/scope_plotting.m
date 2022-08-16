@@ -46,7 +46,7 @@ figure(2);
 subplot(2,1,1);
 plot(t,w_nl);
 xlim([t_start t_start+t_limit]);
-ylim([-5,5]);
+ylim([-2,2]);
 xlabel("t [s]");
 title("Control signal - Nonlinear MPC");
 
@@ -66,7 +66,7 @@ legend("5 observables", ...
         "75 observables", ...
         "100 observables");
 xlim([t_start t_start+t_limit]);
-ylim([-5,5]);
+ylim([-2,2]);
 xlabel("t [s]");
 title("Control signal - Koopman MPC");
 

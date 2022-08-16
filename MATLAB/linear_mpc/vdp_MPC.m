@@ -32,8 +32,8 @@ controller = mpc(oscillator,Ts,25,5);
 % Weights - MV
 controller.Weights.MV = 0;
 controller.Weights.ManipulatedVariablesRate = 0;
-controller.MV.Max = 5;
-controller.MV.Min = -5;
+controller.MV.Max = 2;
+controller.MV.Min = -2;
 
 % Weights - OV
 controller.Weights.OV = [1 zeros(1,length(A)-1)];
