@@ -142,3 +142,10 @@ plot(t_id,X(2,:));
 xlim([0 t_limit]);
 xlabel("t [s]");
 title("(Noisy) Second state - VdP oscillator");
+
+%% Identification set (single orbit)
+
+figure(5);
+scatter(X(1,1:1000),X(2,1:1000));
+xlabel("x1");
+ylabel("x2");
