@@ -8,8 +8,8 @@ Data_Source = "~/Documents/Thesis/Linear_MPC/";
 %% Oscillator
 
 ts = 1e-2;
-T = 10;
-N_Sim = 100;
+T = 100;
+N_Sim = 1;
 
 u_t = 0:ts:T;
 sigma = 1.; % 0 for constant input

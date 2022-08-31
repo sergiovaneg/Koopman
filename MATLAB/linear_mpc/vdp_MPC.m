@@ -10,7 +10,7 @@ external_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
 %% Parameter selection
 
 obs_type = "radial";
-n_g = 10; % M->P in the case of polynomial bases
+n_g = 100; % M->P in the case of polynomial bases
 mf = matfile(data_source+"scope_data.mat","Writable",true);
 
 %% Operator retrieval
@@ -51,16 +51,16 @@ end
 %% Nonlinear MPC comparison setup
 
 % Load nlMPC
-load(external_source+"vdp_mpc_definitive.mat");
+% load(external_source+"vdp_mpc_definitive.mat");
 
 % Bus creation
-createParameterBus(nlobj, ...
-    ['Nonlinear_KalmanMPC' '/vdpMPC'], ...
-    'Ts_Bus',{Ts});
+% createParameterBus(nlobj, ...
+%     ['Nonlinear_KalmanMPC' '/vdpMPC'], ...
+%     'Ts_Bus',{Ts});
 
 %% External reference setup
 
 eta = 0.001;
 
 load(data_source+"data_joint.mat",'R1','R2');
-Tf = 1e3;
+Tf = 1e2;
