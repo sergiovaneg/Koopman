@@ -5,11 +5,12 @@ clc;
 
 %% Directory Selection
 
-data_source = "~/Documents/Thesis/Nonlinear_MPC_VDP/";
+data_source = "~/Documents/Modelway/EKF_MPC_VDP/";
 
 %% Data extraction
 
 X = out.X_hat';
-Y = out.Y';
-U = [out.U_ref';out.U_vdp'];
-save(data_source + "data_kalman_definitive.mat","U","X","Y","Ts","out");
+Y = out.U_vdp';
+W = out.Y';
+% P = out.P';
+save(data_source+"data_kalman.mat","W","X","Y","P","Ts","out");
