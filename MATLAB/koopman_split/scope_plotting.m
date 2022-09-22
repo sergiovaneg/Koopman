@@ -50,7 +50,7 @@ for i=1:no_ng
     error{4*i+1,5} = get_NRMSE(results.step.K_lMPC.covradial{i}.NRMSE,1);
     error{4*i+1,6} = get_NRMSE(results.step.K_lMPC.covradial{i}.NRMSE,2);
 end
-idx = 4*i+1;
+idx = 4*no_ng+1;
 
 error{idx+1,1} = "osc"; error{idx+1,2} = "EKF_nlMPC"; error{idx+1,3} = "";
 error{idx+1,4} = 0;
@@ -87,72 +87,82 @@ error = cell2table(error, "VariableNames", ...
 
 %% Identification set (skipped for now)
 
-%% Step reference
+%% Step reference (EKF)
 
-f = figure(2);
-
-% Control signal
-subplot(3,1,1);
-plot(t, results.step.EKF_nlMPC.w); hold on; grid on;
-plot(t, results.step.K_nlMPC.radial{end}.w);
-plot(t, results.step.K_nlMPC.covradial{end}.w);
-title("W"); xlim([t_start,t_limit]); 
-legend("EKF nlMPC","K-radial nlMPC","K-covradial nlMPC", ...
-    Location="southwest");
+f = figure(2,"EKF (step)");
 
 % First state
-subplot(3,1,2);
-plot(t, results.step.EKF_nlMPC.x(1,:)); hold on; grid on;
-plot(t, results.step.K_nlMPC.radial{end}.x(1,:));
+subplot(2,1,1);
+plot(t, results.step.EKF_nlMPC.x_hat(1,:)); hold on; grid on;
+plot(t, results.step.EKF_nlMPC.x(1,:));
+title("X_1"); xlim([t_start,t_limit]); ylim([-0.2 1.2]);
+legend("Estimation","Real value",Location="southwest");
+
+% Second state
+subplot(2,1,2);
+plot(t, results.step.EKF_nlMPC.x_hat(2,:)); hold on; grid on;
+plot(t, results.step.EKF_nlMPC.x(2,:));
+title("X_2"); xlim([t_start,t_limit]); ylim([-1.2 1.2]);
+legend("Estimation","Real value",Location="southwest");
+
+exportgraphics(f, './step_reference_kalman.eps');
+
+%% Step reference (Koopman)
+
+f = figure(3,"Koopman (step)");
+
+% First state
+subplot(2,1,1);
+plot(t, results.step.K_nlMPC.covradial{end}.x_hat(1,:)); hold on; grid on;
 plot(t, results.step.K_nlMPC.covradial{end}.x(1,:));
-plot(t, results.step.ref(1,:));
-title("X_1"); xlim([t_start,t_limit]); ylim([-1.2 1.2]);
-legend("EKF nlMPC","K-radial nlMPC","K-covradial nlMPC", "Reference", ...
-    Location="southwest");
+title("X_1"); xlim([t_start,t_limit]); ylim([-0.2 1.2]);
+legend("Estimation","Real value",Location="southwest");
 
 % Second state
-subplot(3,1,3);
-plot(t, results.step.EKF_nlMPC.x(2,:)); hold on; grid on;
-plot(t, results.step.K_nlMPC.radial{end}.x(2,:));
+subplot(2,1,2);
+plot(t, results.step.K_nlMPC.covradial{end}.x_hat(2,:)); hold on; grid on;
 plot(t, results.step.K_nlMPC.covradial{end}.x(2,:));
-plot(t, results.step.ref(2,:));
 title("X_2"); xlim([t_start,t_limit]); ylim([-1.2 1.2]);
-legend("EKF nlMPC","K-radial nlMPC","K-covradial nlMPC", "Reference", ...
-    Location="southwest");
+legend("Estimation","Real value",Location="southwest");
 
-exportgraphics(f, './step_reference.eps');
+exportgraphics(f, './step_reference_koopman.eps');
 
-%% Oscillating reference
+%% Oscillating reference (EKF)
 
-f = figure(3);
-
-% Control signal
-subplot(3,1,1);
-plot(t, results.osc.EKF_nlMPC.w); hold on; grid on;
-plot(t, results.osc.K_nlMPC.radial{end}.w);
-plot(t, results.osc.K_nlMPC.covradial{end}.w);
-title("W"); xlim([t_start,t_limit]); 
-legend("EKF nlMPC","K-radial nlMPC","K-covradial nlMPC", ...
-    Location="southwest");
+f = figure(4,"EKF (osc)");
 
 % First state
-subplot(3,1,2);
-plot(t, results.osc.EKF_nlMPC.x(1,:)); hold on; grid on;
-plot(t, results.osc.K_nlMPC.radial{end}.x(1,:));
-plot(t, results.osc.K_nlMPC.covradial{end}.x(1,:));
-plot(t, results.osc.ref(1,:));
-title("X_1"); xlim([t_start,t_limit]); ylim([-1.2 1.2]);
-legend("EKF nlMPC","K-radial nlMPC","K-covradial nlMPC", "Reference", ...
-    Location="southwest");
+subplot(2,1,1);
+plot(t, results.osc.EKF_nlMPC.x_hat(1,:)); hold on; grid on;
+plot(t, results.osc.EKF_nlMPC.x(1,:));
+title("X_1"); xlim([t_start,t_limit]); ylim([-0.2 1.2]);
+legend("Estimation","Real value",Location="southwest");
 
 % Second state
-subplot(3,1,3);
-plot(t, results.osc.EKF_nlMPC.x(2,:)); hold on; grid on;
-plot(t, results.osc.K_nlMPC.radial{end}.x(2,:));
-plot(t, results.osc.K_nlMPC.covradial{end}.x(2,:));
-plot(t, results.osc.ref(2,:));
+subplot(2,1,2);
+plot(t, results.osc.EKF_nlMPC.x_hat(2,:)); hold on; grid on;
+plot(t, results.osc.EKF_nlMPC.x(2,:));
 title("X_2"); xlim([t_start,t_limit]); ylim([-1.2 1.2]);
-legend("EKF nlMPC","K-radial nlMPC","K-covradial nlMPC", "Reference", ...
-    Location="southwest");
+legend("Estimation","Real value",Location="southwest");
 
-exportgraphics(f, './osc_reference.eps');
+exportgraphics(f, './osc_reference_kalman.eps');
+
+%% Oscillating reference (Koopman)
+
+f = figure(5,"Koopman (osc)");
+
+% First state
+subplot(2,1,1);
+plot(t, results.osc.K_nlMPC.covradial{end}.x_hat(1,:)); hold on; grid on;
+plot(t, results.osc.K_nlMPC.covradial{end}.x(1,:));
+title("X_1"); xlim([t_start,t_limit]); ylim([-0.2 1.2]);
+legend("Estimation","Real value",Location="southwest");
+
+% Second state
+subplot(2,1,2);
+plot(t, results.osc.K_nlMPC.covradial{end}.x_hat(2,:)); hold on; grid on;
+plot(t, results.osc.K_nlMPC.covradial{end}.x(2,:));
+title("X_2"); xlim([t_start,t_limit]); ylim([-1.2 1.2]);
+legend("Estimation","Real value",Location="southwest");
+
+exportgraphics(f, './osc_reference_koopman.eps');
