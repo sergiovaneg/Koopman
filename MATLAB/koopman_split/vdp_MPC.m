@@ -85,7 +85,7 @@ for i=0:1
     try
         simout = sim("Kalman_nlMPC.slx");
         aux.simout = simout;
-        aux.NRMSE = simout.NRMSE';
+        aux.RMSE = rmse(simout.X_hat,simout.states,1)';
         aux.x = simout.X';
         aux.x_hat = simout.X_hat';
         aux.w = simout.W';
@@ -125,13 +125,13 @@ for i=0:1
             try
                 simout = sim("Koopman_nlMPC.slx");
                 aux.simout = simout;
-                aux.NRMSE = simout.NRMSE';
+                aux.RMSE = rmse(simout.X_hat,simout.states,1)';
                 aux.x = simout.X';
                 aux.x_hat = simout.X_hat';
                 aux.w = simout.W';
             catch
                 aux.simout = NaN;
-                aux.NRMSE = NaN;
+                aux.RMSE = [NaN;NaN];
                 aux.x = NaN;
                 aux.x_hat = NaN;
                 aux.w = NaN;
@@ -156,13 +156,13 @@ for i=0:1
             try
                 simout = sim("Koopman_lMPC.slx");
                 aux.simout = simout;
-                aux.NRMSE = simout.NRMSE';
+                aux.RMSE = rmse(simout.X_hat,simout.states,1)';
                 aux.x = simout.X';
                 aux.x_hat = simout.X_hat';
                 aux.w = simout.W';
             catch
                 aux.simout = NaN;
-                aux.NRMSE = NaN;
+                aux.RMSE = [NaN;NaN];
                 aux.x = NaN;
                 aux.x_hat = NaN;
                 aux.w = NaN;
