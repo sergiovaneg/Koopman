@@ -95,7 +95,7 @@ f = figure("name","EKF (step)");
 subplot(2,1,1);
 plot(t, results.step.EKF_nlMPC.x_hat(1,:)); hold on; grid on;
 plot(t, results.step.EKF_nlMPC.x(1,:));
-title("X_1"); xlim([t_start,t_limit]); ylim([-0.2 1.2]);
+title("X_1"); xlim([t_start,t_limit]); ylim([-1.2 1.2]);
 legend("Estimation","Real value",Location="southwest");
 
 % Second state
@@ -115,7 +115,7 @@ f = figure("name","Koopman (step)");
 subplot(2,1,1);
 plot(t, results.step.K_nlMPC.covradial{end}.x_hat(1,:)); hold on; grid on;
 plot(t, results.step.K_nlMPC.covradial{end}.x(1,:));
-title("X_1"); xlim([t_start,t_limit]); ylim([-0.2 1.2]);
+title("X_1"); xlim([t_start,t_limit]); ylim([-1.2 1.2]);
 legend("Estimation","Real value",Location="southwest");
 
 % Second state
