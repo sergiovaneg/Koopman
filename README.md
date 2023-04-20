@@ -9,3 +9,5 @@ In the 'MATLAB' directory, you will find most of the early code, as well as the
 open-loop simulation script. Furthermore, in the same directory you will find
 two more subdirectories named 'duffing_mpc' and "vanderpol_mpc", which contain the
 MATLAB files and Simulink models.
+
+Associated paper: Learning Nonlinear Model Predictive Controllers and Virtual Sensors with Koopman Operators (https://doi.org/10.1016/j.ifacol.2023.01.072)
